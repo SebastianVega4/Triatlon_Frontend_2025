@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://triatlonbackend-production.up.railway.app',
+    apiUrl: 'https://triatlon-back-2025.vercel.app',
     inscripcionesAbiertas: false  // Cambiar a false para cerrar inscripciones
   };
