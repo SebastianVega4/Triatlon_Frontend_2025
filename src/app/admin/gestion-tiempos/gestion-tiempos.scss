@@ -1,0 +1,629 @@
+:root {
+  --color-institucional: #fecb00;
+  --color-secundario: #000000;
+  --color-terciario: #f8f9fa;
+}
+
+// Transiciones
+$transition-base: all 0.3s ease-in-out;
+
+// Contenedor principal
+.container {
+  padding-bottom: 3rem;
+}
+
+// Título de la página
+h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: var(--color-secundario);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  i {
+    color: var(--color-secundario);
+    font-size: 2rem;
+  }
+}
+
+// Badge de tiempo
+.badge-tiempo {
+  background-color: var(--color-institucional) !important;
+  color: var(--color-secundario) !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 20px !important;
+  font-family: 'Courier New', monospace;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.25rem;
+
+  i {
+    font-size: 0.9rem;
+  }
+}
+
+// Tabla con estilos institucionales
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  margin-bottom: 0 !important;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 800px; // Ancho mínimo para que se vea bien
+
+  thead {
+    th {
+      background-color: var(--color-secundario) !important;
+      color: white !important;
+      font-weight: 600 !important;
+      padding: 1rem !important;
+      border: none !important;
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: $transition-base;
+      border: none !important;
+
+      &:hover {
+        background-color: rgba(254, 203, 0, 0.15) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      td {
+        padding: 1rem !important;
+        vertical-align: middle !important;
+        border-color: rgba(0, 0, 0, 0.05) !important;
+        color: var(--color-secundario) !important;
+
+        .input-group {
+          width: auto;
+          min-width: 250px;
+
+          input {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Botones con estilos institucionales
+.btn {
+  padding: 0.5rem 0.9rem !important;
+  font-size: 0.875rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+
+  &-outline-primary {
+    border-color: var(--color-institucional) !important;
+    color: var(--color-secundario) !important;
+    background-color: white !important;
+
+    &:hover {
+      background-color: var(--color-institucional) !important;
+      border-color: var(--color-institucional) !important;
+      color: var(--color-secundario) !important;
+    }
+
+    &::before {
+      content: '\F4CA'; // bi-pencil
+      font-family: 'bootstrap-icons';
+      font-size: 0.8rem;
+    }
+  }
+
+  &-success {
+    background-color: var(--color-institucional) !important;
+    border-color: var(--color-institucional) !important;
+    color: var(--color-secundario) !important;
+
+    &:hover {
+      background-color: #e0b000 !important;
+      border-color: #e0b000 !important;
+      color: var(--color-secundario) !important;
+    }
+
+    &::before {
+      content: '\F26B'; // bi-check
+      font-family: 'bootstrap-icons';
+      font-size: 0.8rem;
+    }
+  }
+
+  &-outline-secondary {
+    &::before {
+      content: '\F62A'; // bi-x
+      font-family: 'bootstrap-icons';
+      font-size: 0.8rem;
+    }
+  }
+
+  &-warning {
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
+    color: var(--color-secundario) !important;
+
+    &:hover {
+      background-color: #e0a800 !important;
+      border-color: #e0a800 !important;
+    }
+
+    &::before {
+      content: '\F621'; // bi-exclamation-triangle
+      font-family: 'bootstrap-icons';
+      font-size: 0.8rem;
+    }
+  }
+
+  &-info {
+    background-color: #17a2b8 !important;
+    border-color: #17a2b8 !important;
+
+    &:hover {
+      background-color: #138496 !important;
+      border-color: #138496 !important;
+    }
+
+    &::before {
+      content: '\F3B1'; // bi-award
+      font-family: 'bootstrap-icons';
+      font-size: 0.8rem;
+    }
+  }
+
+  &-outline-success {
+    border-color: var(--color-institucional) !important;
+    color: var(--color-secundario) !important;
+    background-color: white !important;
+
+    &:hover {
+      background-color: var(--color-institucional) !important;
+      border-color: var(--color-institucional) !important;
+      color: var(--color-secundario) !important;
+    }
+  }
+
+  &-sm {
+    padding: 0.35rem 0.65rem !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+// Buscador
+.input-group {
+  max-width: 600px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  margin-bottom: 1.5rem !important;
+
+  .form-control {
+    border: 2px solid transparent !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 1rem !important;
+
+    &:focus {
+      border-color: var(--color-institucional) !important;
+      box-shadow: 0 0 0 0.2rem rgba(254, 203, 0, 0.25) !important;
+    }
+  }
+
+  .input-group-text {
+    background-color: var(--color-institucional) !important;
+    border-color: var(--color-institucional) !important;
+    color: var(--color-secundario) !important;
+    font-weight: bold !important;
+    padding: 0.75rem 1.25rem !important;
+  }
+}
+
+// Alert con colores institucionales
+.alert-warning {
+  background-color: rgba(254, 203, 0, 0.1);
+  border: 2px solid var(--color-institucional);
+  color: var(--color-secundario);
+  border-radius: 8px;
+  padding: 1rem;
+  font-weight: 500;
+}
+
+// Contador de resultados
+.results-count {
+  color: var(--color-secundario);
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+
+  i {
+    color: var(--color-institucional);
+    font-size: 1.2rem;
+  }
+}
+
+// Modal overlay
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+// Modal de tiempos
+.modal-tiempos {
+  background: white;
+  border-radius: 15px;
+  max-width: 1200px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease;
+  overflow: hidden;
+}
+
+// Pestañas de navegación
+.modal-tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-institucional);
+    border-radius: 3px;
+  }
+
+  .tab-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid #dee2e6;
+    background: white;
+    color: var(--color-secundario);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &:hover {
+      border-color: var(--color-institucional);
+      background: rgba(254, 203, 0, 0.1);
+    }
+
+    &.active {
+      background: var(--color-institucional);
+      border-color: var(--color-institucional);
+      color: var(--color-secundario);
+    }
+  }
+}
+
+// Header del modal
+.modal-header-custom {
+  background: linear-gradient(135deg, var(--color-secundario) 0%, #1a1a1a 100%);
+  color: white;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 4px solid var(--color-institucional);
+
+  .modal-title-section {
+    flex: 1;
+
+    h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+      display: flex;
+      align-items: center;
+
+      i {
+        color: var(--color-institucional);
+      }
+    }
+
+    p {
+      margin: 0;
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.9);
+
+      i {
+        color: var(--color-institucional);
+      }
+
+      strong {
+        color: var(--color-institucional);
+      }
+    }
+  }
+
+  .btn-close-modal {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+
+    &:hover {
+      background: var(--color-institucional);
+      border-color: var(--color-institucional);
+      color: var(--color-secundario);
+      transform: rotate(90deg);
+    }
+  }
+}
+
+// Body del modal
+.modal-body-custom {
+  padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
+
+  h4 {
+    color: var(--color-secundario);
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+
+    i {
+      color: var(--color-institucional);
+    }
+  }
+}
+
+// Tabla de participantes en el modal
+.table-participantes {
+  margin-bottom: 0;
+
+  thead th {
+    background-color: var(--color-secundario) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 1rem !important;
+    border: none !important;
+    white-space: nowrap;
+  }
+
+  tbody {
+    tr {
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: rgba(254, 203, 0, 0.1) !important;
+      }
+
+      td {
+        padding: 1rem !important;
+        vertical-align: middle !important;
+        border-color: rgba(0, 0, 0, 0.05) !important;
+      }
+    }
+  }
+}
+
+// Celda de tiempo
+.tiempo-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tiempo-edit {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.btn-group-edit {
+  display: flex;
+  gap: 0.5rem;
+}
+
+// Botones de acción
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+// Animaciones
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  h2 {
+    font-size: 1.5rem;
+
+    &::before {
+      font-size: 1.5rem;
+    }
+  }
+
+  .input-group {
+    max-width: 100%;
+  }
+
+  .table {
+    font-size: 0.9rem;
+
+    thead th,
+    tbody td {
+      padding: 0.75rem 0.5rem !important;
+    }
+
+    .btn {
+      padding: 0.35rem 0.65rem !important;
+      font-size: 0.8rem !important;
+    }
+  }
+
+  .badge-tiempo {
+    font-size: 0.8rem !important;
+    padding: 0.4rem 0.8rem !important;
+  }
+
+  .modal-tiempos {
+    max-height: 95vh;
+    margin: 0.5rem;
+  }
+
+  .modal-tabs {
+    padding: 0.75rem;
+
+    .tab-btn {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+    }
+  }
+
+  .modal-header-custom {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+
+    .modal-title-section {
+      h3 {
+        font-size: 1.25rem;
+      }
+
+      p {
+        font-size: 0.95rem;
+      }
+    }
+
+    .btn-close-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 35px;
+      height: 35px;
+    }
+  }
+
+  .modal-body-custom {
+    padding: 1rem;
+
+    h4 {
+      font-size: 1.1rem;
+    }
+  }
+
+  .table-participantes {
+    font-size: 0.85rem;
+
+    thead th,
+    tbody td {
+      padding: 0.75rem 0.5rem !important;
+    }
+  }
+
+  .tiempo-edit {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+// Estilos para la gestión de tiempos
+.time-display {
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  min-width: 100px;
+  display: inline-block;
+  color: var(--color-secundario);
+}
+
+.time-input {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  min-width: 150px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+
+  &:focus {
+    border-color: var(--color-institucional);
+    box-shadow: 0 0 0 0.2rem rgba(254, 203, 0, 0.25);
+  }
+
+  @media (min-width: 768px) {
+    min-width: 200px;
+  }
+}
+

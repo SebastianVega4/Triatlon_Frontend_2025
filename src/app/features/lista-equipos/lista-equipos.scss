@@ -1,0 +1,180 @@
+@use 'bootstrap/scss/bootstrap' as *;
+@use '../../animaciones.scss' as *;
+
+// Colores UPTC Colombia
+$uptc-primary: #005883;
+$uptc-secondary: #F0B310;
+$uptc-accent: #6D6E70;
+$uptc-light: #E6E7E8;
+$uptc-dark: #333333;
+
+// Colores adicionales para el triatlón
+$tri-red: #E74C3C;
+$tri-blue: #3498DB;
+$tri-green: #2ECC71;
+
+// Espaciados
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: $spacer * 0.25,
+  2: $spacer * 0.5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+);
+
+// Tipografía
+$font-family-base: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+$font-size-base: 1rem;
+$line-height-base: 1.5;
+
+// Breakpoints
+$breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+);
+
+// Sombras
+$box-shadow-sm: 0 0.125rem 0.25rem rgba($uptc-dark, 0.075);
+$box-shadow: 0 0.5rem 1rem rgba($uptc-dark, 0.15);
+$box-shadow-lg: 0 1rem 3rem rgba($uptc-dark, 0.175);
+
+// Transiciones
+$transition-base: all 0.3s ease-in-out;
+$transition-fade: opacity 0.15s linear;
+$transition-collapse: height 0.35s ease;
+
+
+.equipos-list {
+  margin: 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+
+  .alert {
+    grid-column: 1 / -1;
+  }
+}
+
+.equipo-card {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: $box-shadow-sm;
+  transition: $transition-base;
+  animation: fadeIn 0.5s ease-out;
+  border-top: 4px solid $uptc-light;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $box-shadow;
+  }
+
+  h3 {
+    color: $uptc-primary;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: $transition-base;
+
+      &:hover {
+        color: darken($uptc-primary, 10%);
+        text-decoration: underline;
+      }
+    }
+
+    .posicion {
+      background: $uptc-light;
+      color: $uptc-dark;
+      padding: 0.25rem 0.75rem;
+      border-radius: 2rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  .equipo-info {
+    p {
+      margin: 0.5rem 0;
+    }
+
+    .penalizado {
+      color: $tri-red;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+
+  &.gold {
+    border-top-color: #FFD700;
+    background: linear-gradient(to bottom, rgba(255, 215, 0, 0.05), white);
+    
+    .posicion {
+      background: #FFD700;
+      color: $uptc-dark;
+    }
+  }
+
+  &.silver {
+    border-top-color: #C0C0C0;
+    background: linear-gradient(to bottom, rgba(192, 192, 192, 0.05), white);
+    
+    .posicion {
+      background: #C0C0C0;
+      color: $uptc-dark;
+    }
+  }
+
+  &.bronze {
+    border-top-color: #CD7F32;
+    background: linear-gradient(to bottom, rgba(205, 127, 50, 0.05), white);
+    
+    .posicion {
+      background: #CD7F32;
+      color: white;
+    }
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .equipos-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Añadir esto a ambos archivos SCSS (lista-equipos.scss y gestion-tiempos.scss)
+.input-group {
+  margin-bottom: 1.5rem;
+  max-width: 500px;
+
+  .form-control {
+    border-radius: 0.5rem 0 0 0.5rem;
+    border-right: none;
+    &:focus {
+      box-shadow: none;
+      border-color: $uptc-primary;
+    }
+  }
+
+  .input-group-text {
+    background-color: white;
+    border-left: none;
+    border-radius: 0 0.5rem 0.5rem 0;
+    color: $uptc-primary;
+  }
+}
+
+.bi-search::before {
+  content: "\F52A"; // Código del icono de búsqueda de Bootstrap Icons
+}

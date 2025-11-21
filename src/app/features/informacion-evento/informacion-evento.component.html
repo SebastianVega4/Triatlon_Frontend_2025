@@ -1,0 +1,74 @@
+<section class="info-evento-container" id="info">
+  <h2>Información del Evento</h2>
+  <p class="subtitle">Haz clic en una disciplina para ver los detalles, el reglamento y el mapa del recorrido.</p>
+
+  <div class="disciplinas-selector">
+    @for (disciplina of disciplinas(); track disciplina.nombre) {
+      <button 
+        class="disciplina-btn" 
+        [class.active]="selectedDiscipline() === disciplina"
+        (click)="selectDiscipline(disciplina)">
+        {{ disciplina.nombre }}
+      </button>
+    }
+  </div>
+
+  @if (selectedDiscipline(); as disciplina) {
+    <div class="modal-overlay" (click)="closeDetail()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="closeDetail()" aria-label="Cerrar detalles">×</button>
+        
+        <!-- Pestañas de navegación -->
+        <div class="modal-tabs">
+          @for (disc of disciplinas(); track disc.nombre) {
+            <button 
+              class="tab-btn" 
+              [class.active]="selectedDiscipline() === disc"
+              (click)="selectDiscipline(disc)">
+              {{ disc.nombre }}
+            </button>
+          }
+        </div>
+
+        <h3>{{ disciplina.nombre }}</h3>
+        
+        <div class="detalle-content">
+          <div class="texto-info">
+            <h4>Reglamento</h4>
+            <p style="white-space: pre-line;">{{ disciplina.reglamento }}</p>
+            
+            <h4>Reglas Clave</h4>
+            <p style="white-space: pre-line;">{{ disciplina.reglas }}</p>
+          </div>
+          
+          <div class="columna-derecha">
+            @if (disciplina.infoAdicional) {
+              <div class="info-adicional">
+                <h4>Información Importante</h4>
+                <p style="white-space: pre-line;">{{ disciplina.infoAdicional }}</p>
+              </div>
+            }
+            
+            <div class="mapa-info">
+              <h4>{{ disciplina.nombre === 'Natación' ? 'Lugar Piscina Curi' : 'Mapa del Recorrido' }}</h4>
+              @if (disciplina.nombre === 'Natación') {
+                <img src="assets\maps\natacion.png" alt="Lugar de natación" class="mapa-img">
+                <div class="google-maps-container">
+                  <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3969.9862333827705!2d-72.9340009250137!3d5.715119794266834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e6a45da364ac9c9%3A0x6635bc6b8f749c29!2sCentro%20Urbano%20de%20Recreacion%20Infantil%2C%20Sogamoso!5e0!3m2!1ses!2sco!4v1762402120017!5m2!1ses!2sco" 
+                    class="google-maps-iframe"
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
+                </div>
+              } @else {
+                <img [src]="disciplina.mapaUrl" [alt]="'Mapa del recorrido de ' + disciplina.nombre" class="mapa-img">
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</section>

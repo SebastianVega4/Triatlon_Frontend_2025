@@ -1,0 +1,84 @@
+:root {
+  --color-institucional: #fecb00;
+  --color-secundario: #000000;
+  --color-terciario: #f8f9fa;
+}
+
+.footer {
+  background-color: var(--color-secundario);
+  color: white;
+  padding: 40px 0 20px;
+}
+
+.footer-logo {
+  height: 60px;
+  margin-bottom: 20px;
+}
+
+.footer-link {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.footer-link:hover {
+  color: var(--color-institucional);
+}
+
+.social-icon {
+  color: white;
+  font-size: 1.5rem;
+  margin-right: 15px;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+
+.social-icon:hover {
+  color: var(--color-institucional);
+}
+
+.footer-divider {
+  border-color: rgba(255,255,255,0.1);
+}
+
+// Enlace de "Acerca de" en el footer
+.footer-separator {
+  margin: 0 0.75rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.about-link-footer {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+
+  i {
+    color: var(--color-institucional);
+    font-size: 0.9rem;
+  }
+
+  &:hover {
+    color: var(--color-institucional);
+    text-decoration: underline;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .text-center p {
+    font-size: 0.9rem;
+  }
+
+  .footer-separator {
+    display: block;
+    margin: 0.5rem 0;
+  }
+
+  .about-link-footer {
+    display: block;
+    margin-top: 0.5rem;
+  }
+}

@@ -1,0 +1,318 @@
+:root {
+  --color-institucional: #fecb00;
+  --color-secundario: #000000;
+  --color-terciario: #f8f9fa;
+}
+
+:host {
+  display: block;
+  background-color: white;
+  padding: 3rem 1rem;
+  min-height: calc(100vh - 200px);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.equipo-detalle {
+  animation: fadeIn 0.5s ease-out;
+  background: white;
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e9ecef;
+
+  h2 {
+    color: var(--color-secundario);
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-align: center;
+    position: relative;
+    padding-bottom: 1rem;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 5px;
+      background-color: var(--color-institucional);
+      border-radius: 3px;
+    }
+  }
+
+  > p {
+    font-size: 1.2rem;
+    color: var(--color-secundario);
+    font-weight: 600;
+    text-align: center;
+    margin: 1rem 0;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-terciario);
+    border-radius: 10px;
+    display: inline-block;
+    width: auto;
+    margin-left: 50%;
+    transform: translateX(-50%);
+
+    &:first-of-type {
+      background-color: rgba(254, 203, 0, 0.15);
+      border: 2px solid var(--color-institucional);
+    }
+  }
+
+  .alert-info {
+    background-color: rgba(254, 203, 0, 0.1);
+    border: 2px solid var(--color-institucional);
+    color: var(--color-secundario);
+    padding: 1.5rem;
+    border-radius: 10px;
+    font-weight: 500;
+    text-align: center;
+    margin: 2rem 0;
+  }
+
+  .penalizado {
+    color: #dc3545;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(220, 53, 69, 0.1);
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    border: 2px solid #dc3545;
+    margin: 1rem 0;
+  }
+
+  h3 {
+    color: var(--color-secundario);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 3rem 0 2rem;
+    text-align: center;
+    position: relative;
+    padding-bottom: 0.75rem;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background-color: var(--color-institucional);
+      border-radius: 2px;
+    }
+  }
+
+  .participantes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  .participante-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid #e9ecef;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--color-institucional) 0%, #e0b000 100%);
+    }
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      border-color: var(--color-institucional);
+    }
+
+    &.penalizado {
+      border-color: #dc3545;
+      background-color: rgba(220, 53, 69, 0.02);
+
+      &::before {
+        background: #dc3545;
+      }
+    }
+
+    h4 {
+      color: var(--color-secundario);
+      margin-bottom: 1.5rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-align: center;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--color-terciario);
+    }
+
+    p {
+      margin: 0.75rem 0;
+      font-size: 1.05rem;
+      color: #495057;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem;
+      background-color: var(--color-terciario);
+      border-radius: 8px;
+      font-weight: 500;
+
+      &::before {
+        content: '•';
+        color: var(--color-institucional);
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+    }
+
+    .penalizado-badge {
+      background-color: rgba(220, 53, 69, 0.15);
+      color: #dc3545;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border: 2px solid #dc3545;
+      margin-top: 1rem;
+
+      &::before {
+        content: none;
+      }
+    }
+  }
+
+  .navigation-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--color-terciario);
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: white;
+      background-color: var(--color-secundario);
+      padding: 0.75rem 2rem;
+      border-radius: 10px;
+      border: 2px solid var(--color-secundario);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: var(--color-institucional);
+        color: var(--color-secundario);
+        border-color: var(--color-institucional);
+        transform: translateX(-5px);
+        box-shadow: 0 4px 12px rgba(254, 203, 0, 0.3);
+      }
+    }
+  }
+}
+
+// Animaciones
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  :host {
+    padding: 2rem 0.5rem;
+  }
+
+  .equipo-detalle {
+    padding: 2rem 1.5rem;
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    .participantes-list {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .participante-card {
+      padding: 1.5rem;
+
+      h4 {
+        font-size: 1.2rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+    }
+
+    .navigation-links {
+      .back-link {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .equipo-detalle {
+    padding: 1.5rem 1rem;
+
+    h2 {
+      font-size: 1.75rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+    }
+
+    .participante-card {
+      padding: 1rem;
+
+      h4 {
+        font-size: 1.1rem;
+      }
+
+      p {
+        font-size: 0.95rem;
+      }
+    }
+  }
+}

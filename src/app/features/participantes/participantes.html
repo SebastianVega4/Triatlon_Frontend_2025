@@ -1,0 +1,145 @@
+<div class="container mt-4 mb-5">
+  <h2 class="page-title">
+    <i class="bi bi-people-fill me-2"></i>
+    Listado de Participantes
+  </h2>
+
+  <!-- Mensaje informativo -->
+  <div class="alert alert-info-custom mb-4" role="alert">
+    <i class="bi bi-info-circle me-2"></i>
+    <strong>Nota:</strong> Solo se muestran los equipos que han sido aprobados. Si enviaste tu inscripción recientemente, 
+    tu equipo aparecerá aquí una vez que sea revisado y aprobado por los organizadores.
+  </div>
+
+  <!-- Filtros y búsqueda -->
+  <div class="filters-section mb-4">
+    <div class="row g-3">
+      <div class="col-lg-6 col-md-12">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar participante por nombre o equipo..."
+            [(ngModel)]="terminoBusqueda"
+            (input)="filtrarParticipantes()"
+          />
+          <span class="input-group-text">
+            <i class="bi bi-search"></i>
+          </span>
+        </div>
+      </div>
+      
+      <!-- Filtro de disciplina solo cuando NO está agrupado por equipos -->
+      <div class="col-lg-4 col-md-10" *ngIf="!agruparPorEquipo">
+        <select class="form-select filter-select" [(ngModel)]="disciplinaFiltro" (change)="cambiarDisciplina()">
+          <option *ngFor="let d of disciplinas" [value]="d.valor">
+            {{ d.nombre }}
+          </option>
+        </select>
+      </div>
+      
+      <!-- Espacio vacío cuando está en vista por equipos para mantener el botón en su lugar -->
+      <div class="col-lg-4 col-md-10" *ngIf="agruparPorEquipo"></div>
+      
+      <!-- Botón toggle siempre a la derecha -->
+      <div class="col-lg-2 col-md-2">
+        <button 
+          class="btn btn-toggle w-100" 
+          [class.active]="agruparPorEquipo"
+          (click)="toggleAgruparPorEquipo()">
+          <i class="bi" [ngClass]="agruparPorEquipo ? 'bi-list-ul' : 'bi-grid-3x3-gap'"></i>
+          {{ agruparPorEquipo ? 'Lista' : 'Equipos' }}
+        </button>
+      </div>
+    </div>
+    
+    <div class="results-count mt-3" *ngIf="!agruparPorEquipo">
+      <i class="bi bi-person-fill me-2"></i>
+      <span>{{participantesFiltrados.length}} de {{participantes.length}} participantes</span>
+    </div>
+    <div class="results-count mt-3" *ngIf="agruparPorEquipo">
+      <i class="bi bi-people-fill me-2"></i>
+      <span>{{equiposAgrupados.length}} equipos</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading; else loadingTemplate">
+    <!-- Vista normal (sin agrupar) -->
+    <div *ngIf="!agruparPorEquipo" class="table-responsive">
+      <table class="table table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>Nombre</th>
+            <th>Equipo</th>
+            <th>Disciplina</th>
+            <th>Rol</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of participantesFiltrados">
+            <td>
+              <strong>{{ p.nombre }}</strong>
+              <span *ngIf="p.delegado" class="badge badge-delegado ms-2">
+                <i class="bi bi-star-fill me-1"></i>Delegado
+              </span>
+            </td>
+            <td>{{ p.equipoNombre || 'Sin equipo' }}</td>
+            <td>
+              <i class="bi {{ getIconoDisciplina(p.disciplina) }} me-2"></i>
+              {{ getNombreDisciplina(p.disciplina) }}
+            </td>
+            <td>{{ p.rol ? (p.rol | titlecase) : '--' }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="participantesFiltrados.length === 0" class="alert alert-warning">
+        No se encontraron participantes con ese criterio de búsqueda
+      </div>
+    </div>
+
+    <!-- Vista agrupada por equipos -->
+    <div *ngIf="agruparPorEquipo" class="equipos-container">
+      <div *ngFor="let equipo of equiposAgrupados" class="equipo-card">
+        <div class="equipo-header">
+          <h4 class="equipo-nombre">
+            <i class="bi bi-people-fill me-2"></i>
+            {{ equipo.nombre }}
+          </h4>
+        </div>
+        <div class="equipo-body">
+          <div class="row g-3">
+            <div *ngFor="let p of equipo.participantes" class="col-md-4">
+              <div class="participante-card">
+                <div class="participante-nombre">
+                  <strong>{{ p.nombre }}</strong>
+                  <span *ngIf="p.delegado" class="badge badge-delegado-small">
+                    <i class="bi bi-star-fill"></i>
+                  </span>
+                </div>
+                <div class="participante-info">
+                  <div class="info-item">
+                    <i class="bi {{ getIconoDisciplina(p.disciplina) }} me-2"></i>
+                    <span>{{ getNombreDisciplina(p.disciplina) }}</span>
+                  </div>
+                  <div class="info-item">
+                    <i class="bi bi-person-badge me-2"></i>
+                    <span>{{ p.rol ? (p.rol | titlecase) : '--' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="equiposAgrupados.length === 0" class="alert alert-warning">
+        No se encontraron equipos con ese criterio de búsqueda
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <app-loading></app-loading>
+  </ng-template>
+</div>

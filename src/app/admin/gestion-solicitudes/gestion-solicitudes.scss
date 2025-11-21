@@ -1,0 +1,867 @@
+:root {
+  --color-institucional: #fecb00;
+  --color-secundario: #000000;
+  --color-terciario: #f8f9fa;
+}
+
+$transition-base: all 0.3s ease-in-out;
+
+// Contenedor principal
+.gestion-imagenes-container {
+  padding: 2rem;
+  min-height: 100vh;
+  background-color: var(--color-terciario);
+
+  .container-fluid {
+    padding-bottom: 3rem;
+  }
+
+  // Título de la página
+  .page-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: var(--color-secundario);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    i {
+      color: var(--color-secundario);
+      font-size: 2rem;
+    }
+  }
+
+  // Pestañas de navegación
+  .nav-tabs {
+    border-bottom: 2px solid #dee2e6;
+    margin-bottom: 1.5rem;
+
+    .nav-item {
+      .nav-link {
+        border: none;
+        background: transparent;
+        color: #6c757d;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        transition: $transition-base;
+        border-bottom: 3px solid transparent;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        &:hover {
+          color: var(--color-secundario);
+          border-bottom-color: rgba(254, 203, 0, 0.3);
+        }
+
+        &.active {
+          color: var(--color-secundario);
+          border-bottom-color: var(--color-institucional);
+          background: transparent;
+        }
+
+        .badge {
+          font-size: 0.85rem;
+          padding: 0.35rem 0.7rem;
+        }
+      }
+    }
+  }
+
+  // Cards
+  .card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: $transition-base;
+    background-color: white;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  // Card de lista de solicitudes
+  .images-list-card {
+    .card-header {
+      background-color: var(--color-secundario);
+      color: white;
+      border-radius: 12px 12px 0 0;
+      padding: 1rem 1.5rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h5 {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        i {
+          color: var(--color-institucional);
+        }
+
+        .badge {
+          font-size: 0.85rem;
+          padding: 0.4rem 0.8rem;
+        }
+      }
+
+      .btn {
+        color: white;
+        border-color: rgba(255, 255, 255, 0.3);
+
+        &:hover {
+          background-color: var(--color-institucional);
+          border-color: var(--color-institucional);
+          color: var(--color-secundario);
+        }
+      }
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+  }
+
+  // Grid de solicitudes
+  .images-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  // Item de solicitud
+  .image-item {
+    padding: 1rem 1.5rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    background: white;
+    transition: $transition-base;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: var(--color-institucional);
+      transform: translateX(5px);
+    }
+
+    .image-info {
+      flex: 1;
+
+      .image-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--color-secundario);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        i {
+          color: var(--color-institucional);
+        }
+      }
+
+      .image-description {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+
+        i {
+          color: var(--color-institucional);
+        }
+      }
+    }
+
+    .image-actions {
+      gap: 0.5rem;
+      display: flex;
+      align-items: center;
+
+      .btn {
+        transition: all 0.2s ease;
+        border-radius: 8px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 0.75rem;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+
+        &-info {
+          background-color: #17a2b8;
+          border-color: #17a2b8;
+
+          &:hover {
+            background-color: #138496;
+            border-color: #138496;
+          }
+        }
+
+        &-secondary-custom {
+          background-color: #5C636A !important;
+          border-color: #5C636A !important;
+          color: white !important;
+
+          &:hover {
+            background-color: #4a5056 !important;
+            border-color: #4a5056 !important;
+          }
+        }
+
+        &-success {
+          background-color: var(--color-institucional);
+          border-color: var(--color-institucional);
+          color: var(--color-secundario);
+
+          &:hover {
+            background-color: #e0b000;
+            border-color: #e0b000;
+          }
+        }
+
+        &-danger {
+          &:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+          }
+        }
+
+        &-warning {
+          &:hover {
+            background-color: #e0a800;
+            border-color: #d39e00;
+          }
+        }
+      }
+    }
+  }
+
+  // Modales
+  .modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+    border: none;
+  }
+
+  .modal-header {
+    border-bottom: none;
+    padding: 1.5rem;
+    color: white;
+
+    &.bg-success {
+      background-color: var(--color-institucional) !important;
+      color: var(--color-secundario) !important;
+
+      .btn-close-white {
+        filter: brightness(0);
+      }
+    }
+
+    &.bg-danger {
+      background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+    }
+
+    &.bg-primary {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    }
+
+    &.bg-dark {
+      background-color: var(--color-secundario) !important;
+      color: white !important;
+    }
+
+    &.bg-warning {
+      background-color: #ffc107 !important;
+      color: var(--color-secundario) !important;
+
+      .btn-close {
+        filter: brightness(0);
+      }
+    }
+
+    .modal-title {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+
+    p {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .text-muted {
+      font-size: 0.9rem;
+    }
+
+    .form-label {
+      color: var(--color-secundario);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      padding: 0.75rem;
+
+      &:focus {
+        border-color: var(--color-institucional);
+        box-shadow: 0 0 0 0.2rem rgba(254, 203, 0, 0.25);
+      }
+    }
+  }
+
+  .modal-footer {
+    border-top: none;
+    padding: 1rem 1.5rem;
+    background-color: #f8f9fa;
+
+    .btn {
+      padding: 0.5rem 1.5rem;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: $transition-base;
+
+      &-success {
+        background-color: var(--color-institucional);
+        border-color: var(--color-institucional);
+        color: var(--color-secundario);
+
+        &:hover {
+          background-color: #e0b000;
+          border-color: #e0b000;
+        }
+      }
+
+      &-danger {
+        &:hover {
+          background-color: #c82333;
+          border-color: #bd2130;
+        }
+      }
+
+      &-warning {
+        &:hover {
+          background-color: #e0a800;
+          border-color: #d39e00;
+        }
+      }
+    }
+  }
+
+  // Backdrop del modal
+  .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  // Badges
+  .badge {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    font-weight: 600;
+    border-radius: 20px;
+
+    &-institucional {
+      background-color: var(--color-institucional) !important;
+      color: var(--color-secundario) !important;
+    }
+  }
+
+  // Alertas
+  .alert {
+    border-radius: 10px;
+    border: none;
+    padding: 1rem 1.5rem;
+    font-weight: 500;
+
+    &-success {
+      background-color: rgba(254, 203, 0, 0.1);
+      border-left: 4px solid var(--color-institucional);
+      color: var(--color-secundario);
+    }
+
+    &-danger {
+      background-color: rgba(220, 53, 69, 0.1);
+      border-left: 4px solid #dc3545;
+      color: #721c24;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .gestion-imagenes-container {
+    padding: 1rem;
+
+    .page-title {
+      font-size: 1.5rem;
+
+      i {
+        font-size: 1.5rem;
+      }
+    }
+
+    .nav-tabs {
+      .nav-item {
+        .nav-link {
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .image-item {
+      flex-direction: column;
+      align-items: flex-start !important;
+      padding: 1rem;
+
+      .image-actions {
+        margin-top: 1rem;
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+    }
+
+    .modal-content {
+      margin: 0.5rem;
+    }
+
+    .modal-header {
+      padding: 1rem;
+
+      .modal-title {
+        font-size: 1.1rem;
+      }
+    }
+
+    .modal-body {
+      padding: 1rem;
+    }
+
+    .modal-footer {
+      padding: 0.75rem 1rem;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+}
+// B
+otón de PDF
+.btn-info {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  color: white;
+  transition: $transition-base;
+
+  &:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+  }
+
+  i {
+    font-size: 1rem;
+  }
+}
+
+// Modal de documento
+.modal-xl {
+  max-width: 90%;
+  
+  .modal-body {
+    padding: 0;
+    
+    iframe {
+      display: block;
+    }
+  }
+}
+
+// Modal de revisión completa
+.modal-fullscreen-lg-down {
+  @media (max-width: 991.98px) {
+    max-width: 100% !important;
+    margin: 0;
+    
+    .modal-content {
+      height: 100vh;
+      border-radius: 0;
+    }
+  }
+}
+
+// Estilos para el botón de revisar solicitud
+.btn-revisar-solicitud {
+  background-color: var(--color-institucional);
+  border-color: var(--color-institucional);
+  color: var(--color-secundario);
+  font-weight: 600;
+  transition: $transition-base;
+  
+  &:hover {
+    background-color: #e0b000;
+    border-color: #e0b000;
+    color: var(--color-secundario);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(254, 203, 0, 0.4);
+  }
+
+  &:focus,
+  &:active {
+    background-color: #e0b000 !important;
+    border-color: #e0b000 !important;
+    color: var(--color-secundario) !important;
+    box-shadow: 0 0 0 0.25rem rgba(254, 203, 0, 0.25) !important;
+  }
+}
+
+// Header del modal de revisión
+.modal-header-revision {
+  background-color: var(--color-secundario);
+  color: white;
+  border-bottom: 3px solid var(--color-secundario);
+}
+
+// Títulos de sección dentro del modal de revisión
+.titulo-seccion-revision {
+  color: var(--color-secundario) !important;
+  border-bottom: 2px solid var(--color-institucional);
+  padding-bottom: 0.5rem;
+}
+
+// Botón de descargar PDF
+.btn-descargar-pdf {
+  background-color: var(--color-institucional);
+  border-color: var(--color-institucional);
+  color: var(--color-secundario);
+  font-weight: 600;
+  transition: $transition-base;
+  
+  &:hover {
+    background-color: #e0b000;
+    border-color: #e0b000;
+    color: var(--color-secundario);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(254, 203, 0, 0.4);
+  }
+
+  &:focus,
+  &:active {
+    background-color: #e0b000 !important;
+    border-color: #e0b000 !important;
+    color: var(--color-secundario) !important;
+    box-shadow: 0 0 0 0.25rem rgba(254, 203, 0, 0.25) !important;
+  }
+}
+
+// Contenedor del PDF para evitar movimientos repentinos
+.pdf-container {
+  height: 70vh;
+  overflow: hidden;
+  position: relative;
+  background-color: #f5f5f5;
+  
+  // Estabilizar el contenedor
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: auto;
+}
+
+.pdf-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background-color: white;
+  
+  // Prevenir movimientos repentinos con aceleración por hardware
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+  
+  // Suavizar cualquier cambio
+  transition: none;
+  
+  // Forzar capa de composición separada
+  isolation: isolate;
+}
+
+// Z-index para modales apilados
+// Backdrop del modal de revisión (base)
+.modal-backdrop {
+  z-index: 1040;
+  
+  &.show {
+    opacity: 0.5;
+  }
+}
+
+// Backdrop del modal de revisión con difuminado
+.backdrop-revision {
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+// Backdrop del modal de confirmación (encima)
+.backdrop-confirmacion {
+  z-index: 1055 !important;
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  opacity: 1 !important;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+// Modal de confirmación debe estar encima del modal de revisión
+.modal-confirmacion {
+  z-index: 1060 !important;
+  animation: modalConfirmacionFadeIn 0.3s ease-out;
+  
+  .modal-content {
+    animation: modalConfirmacionSlideIn 0.3s ease-out;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+}
+
+// Modal de revisión difuminado cuando hay modal de confirmación encima
+.modal-difuminado {
+  .modal-content {
+    filter: blur(2px);
+    -webkit-filter: blur(2px);
+    transition: filter 0.3s ease;
+    
+    // Prevenir que el iframe se mueva durante el difuminado
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: filter;
+  }
+  
+  // Estabilizar el iframe específicamente
+  .pdf-iframe {
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+    pointer-events: none; // Deshabilitar interacción mientras está difuminado
+  }
+}
+
+// Animaciones para el modal de confirmación
+@keyframes modalConfirmacionFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalConfirmacionSlideIn {
+  from {
+    transform: translateY(-50px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+// Header del modal de documentos
+.modal-header-documento {
+  background-color: var(--color-secundario);
+  color: white;
+  border-bottom: 3px solid var(--color-secundario);
+}
+
+// Contenedor del PDF en modal de documentos
+.pdf-container-documento {
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+  background-color: #f5f5f5;
+}
+
+// Notificaciones emergentes
+.notificacion-emergente {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  min-width: 350px;
+  max-width: 500px;
+  animation: slideInRight 0.4s ease-out, fadeOut 0.3s ease-in 4.7s forwards;
+  
+  @media (max-width: 768px) {
+    left: 20px;
+    right: 20px;
+    min-width: auto;
+    max-width: none;
+  }
+}
+
+.notificacion-contenido {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.notificacion-success {
+  .notificacion-contenido {
+    background: linear-gradient(135deg, rgba(254, 203, 0, 0.95) 0%, rgba(254, 203, 0, 0.98) 100%);
+    border-left: 5px solid #d4a500;
+  }
+  
+  .notificacion-icono {
+    color: var(--color-secundario);
+    font-size: 2rem;
+  }
+  
+  .notificacion-titulo {
+    color: var(--color-secundario);
+  }
+  
+  .notificacion-mensaje {
+    color: var(--color-secundario);
+  }
+}
+
+.notificacion-error {
+  .notificacion-contenido {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.95) 0%, rgba(220, 53, 69, 0.98) 100%);
+    border-left: 5px solid #a71d2a;
+  }
+  
+  .notificacion-icono {
+    color: white;
+    font-size: 2rem;
+  }
+  
+  .notificacion-titulo {
+    color: white;
+  }
+  
+  .notificacion-mensaje {
+    color: white;
+  }
+}
+
+.notificacion-icono {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notificacion-texto {
+  flex: 1;
+  
+  .notificacion-titulo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+  }
+  
+  .notificacion-mensaje {
+    font-size: 0.95rem;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+.notificacion-cerrar {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+  
+  &:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Animaciones para notificaciones
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(400px);
+  }
+}
+
+// Botón de refrescar
+.btn-refrescar {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+  background: transparent;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: var(--color-institucional);
+    border-color: var(--color-institucional);
+    color: var(--color-secundario);
+    transform: rotate(180deg);
+  }
+
+  &:focus,
+  &:active {
+    background-color: var(--color-institucional) !important;
+    border-color: var(--color-institucional) !important;
+    color: var(--color-secundario) !important;
+    box-shadow: 0 0 0 0.25rem rgba(254, 203, 0, 0.25) !important;
+  }
+}

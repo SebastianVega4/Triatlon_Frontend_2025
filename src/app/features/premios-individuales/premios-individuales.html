@@ -1,0 +1,74 @@
+<div class="container">
+    <h2>Premios Individuales</h2>
+    
+    <app-loading *ngIf="loading"></app-loading>
+  
+    <!-- Mensaje cuando los resultados están ocultos -->
+    <div *ngIf="!loading && !resultadosVisibles" class="resultados-ocultos-container">
+      <div class="resultados-ocultos-card">
+        <i class="bi bi-eye-slash-fill ocultos-icon"></i>
+        <h3>Resultados Temporalmente Ocultos</h3>
+        <p>
+          Los premios individuales están ocultos temporalmente hasta la ceremonia de premiación.
+        </p>
+        <p class="text-muted">
+          <i class="bi bi-trophy me-2"></i>
+          Una vez finalice la ceremonia, podrás ver los ganadores de cada categoría aquí.
+        </p>
+        <div class="cta-buttons-ocultos">
+          <a routerLink="/participantes" class="btn-cta-ocultos">
+            <i class="bi bi-people-fill me-2"></i>
+            Ver Participantes
+          </a>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Premios cuando los resultados están visibles -->
+    <div *ngIf="!loading && resultadosVisibles">
+      <div *ngIf="premios.length > 0" class="premios-list">
+        <div *ngFor="let premio of premios" class="premio-card">
+          <div class="premio-icon">
+            <i class="bi bi-trophy-fill"></i>
+          </div>
+          <h3>{{ getCategoriaNombre(premio.categoria) }}</h3>
+          <div class="premio-info">
+            <div *ngIf="premio.participante_nombre" class="info-item">
+              <i class="bi bi-person-fill"></i>
+              <div>
+                <span class="label">Ganador</span>
+                <span class="value">{{ premio.participante_nombre }}</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-people-fill"></i>
+              <div>
+                <span class="label">Equipo</span>
+                <span class="value">{{ premio.equipo_nombre || 'No asignado' }}</span>
+              </div>
+            </div>
+            <div *ngIf="premio.tiempo" class="info-item">
+              <i class="bi bi-stopwatch-fill"></i>
+              <div>
+                <span class="label">Tiempo</span>
+                <span class="value tiempo">{{ premio.tiempo }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="premios.length === 0" class="alert alert-info">
+        <i class="bi bi-info-circle me-2"></i>
+        No se encontraron premios individuales registrados
+      </div>
+
+      <!-- Botón para ir a clasificación general -->
+      <div class="navigation-section">
+        <a routerLink="/podio" class="btn-clasificacion">
+          <i class="bi bi-trophy-fill me-2"></i>
+          Ver Clasificación General
+        </a>
+      </div>
+    </div>
+  </div>

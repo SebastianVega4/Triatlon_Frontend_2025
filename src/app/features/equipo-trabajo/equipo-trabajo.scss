@@ -1,0 +1,235 @@
+:root {
+  --color-institucional: #fecb00;
+  --color-secundario: #000000;
+  --color-terciario: #f8f9fa;
+}
+
+// Sección de encabezado
+.about-header {
+  background: linear-gradient(135deg, var(--color-secundario) 0%, #1a1a1a 100%);
+  color: white;
+  text-align: center;
+  padding: 80px 20px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(254,203,0,0.1)"/></svg>');
+    opacity: 0.3;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.about-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: white;
+  
+  &::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: var(--color-institucional);
+    margin: 20px auto 0;
+  }
+}
+
+.about-subtitle {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+// Sección del equipo
+.team-section {
+  padding: 80px 0;
+  background-color: var(--color-terciario);
+}
+
+.section-title {
+  color: var(--color-secundario);
+  font-weight: bold;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  text-align: center;
+  position: relative;
+  padding-bottom: 20px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: var(--color-institucional);
+  }
+}
+
+.team-intro {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 50px;
+}
+
+// Grid de tarjetas
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Tarjeta del equipo
+.team-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+
+    .team-card-image img {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.team-card-image {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s ease;
+  }
+
+  // Ajustes específicos de posición para cada miembro
+  &.member-0 img {
+    // Andres Amaya 
+    object-position: center 5%;
+  }
+  &.member-1 img {
+    // Sebastián Vega 
+    object-position: center 30%;
+  }
+  &.member-2 img {
+    // Tatiana Lesmes 
+    object-position: center 20%;
+  }
+
+  &.member-4 img {
+    // Alixon Lopez 
+    object-position: center 96%;
+  }
+
+  &.member-5 img {
+    // Ingrith Rodriguez 
+    object-position: center 7%;
+  }
+}
+
+.team-card-body {
+  padding: 25px;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.team-card-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-secundario);
+  margin-bottom: 8px;
+}
+
+.team-card-role {
+  display: inline-block;
+  font-size: 0.95rem;
+  color: white;
+  background-color: var(--color-institucional);
+  font-weight: 600;
+  padding: 5px 15px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+}
+
+.team-card-description {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .about-title {
+    font-size: 2rem;
+  }
+
+  .about-subtitle {
+    font-size: 1rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .team-intro {
+    font-size: 1rem;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .team-card-image {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-header {
+    padding: 60px 15px;
+  }
+
+  .about-title {
+    font-size: 1.8rem;
+  }
+
+  .team-section {
+    padding: 60px 0;
+  }
+}

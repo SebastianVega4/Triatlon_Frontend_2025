@@ -1,0 +1,74 @@
+<div class="container mt-4">
+    <h2>Editar Equipo</h2>
+    
+    <form [formGroup]="equipoForm" (ngSubmit)="guardarCambios()" *ngIf="!loading; else loadingTemplate">
+      <div class="mb-3">
+        <label for="nombreEquipo" class="form-label">Nombre del Equipo</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="nombreEquipo" 
+          formControlName="nombre"
+          required
+        >
+      </div>
+      
+      <h4 class="mt-4">Participantes</h4>
+      
+      <div class="participante-card mb-3" *ngFor="let participante of participantes; let i = index">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Participante {{ i + 1 }}</h5>
+            
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                [(ngModel)]="participante.nombre"
+                [ngModelOptions]="{standalone: true}"
+                required
+              >
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Género</label>
+              <select 
+                class="form-select" 
+                [(ngModel)]="participante.genero"
+                [ngModelOptions]="{standalone: true}"
+              >
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+              </select>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Disciplina</label>
+              <select 
+                class="form-select" 
+                [(ngModel)]="participante.disciplina"
+                [ngModelOptions]="{standalone: true}"
+                required
+              >
+                <option [ngValue]="null" disabled>Seleccione disciplina</option>
+                <option *ngFor="let disciplina of disciplinas" [ngValue]="disciplina">
+                  {{ disciplina | titlecase }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="d-flex justify-content-end mt-4">
+        <button type="submit" class="btn btn-primary" [disabled]="equipoForm.invalid">
+          Guardar Cambios
+        </button>
+      </div>
+    </form>
+    
+    <ng-template #loadingTemplate>
+      <app-loading></app-loading>
+    </ng-template>
+  </div>

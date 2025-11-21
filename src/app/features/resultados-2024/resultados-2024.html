@@ -1,0 +1,172 @@
+<div class="results-header">
+  <div class="container">
+    <h1 class="results-title">
+      <i class="bi bi-trophy-fill me-2"></i>
+      Resultados 2024
+    </h1>
+    <p class="results-subtitle">Resultados históricos del evento de Triatlón UPTC 2024</p>
+  </div>
+</div>
+
+<div class="container mt-4 mb-5">
+
+  <!-- Filtros y búsqueda -->
+  <div class="filters-section mb-4">
+    <div class="row g-3">
+      <div class="col-lg-4 col-md-12">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Buscar participante o equipo"
+            [(ngModel)]="terminoBusqueda" (input)="filtrarParticipantes()" />
+          <span class="input-group-text">
+            <i class="bi bi-search"></i>
+          </span>
+        </div>
+      </div>
+
+      <!-- Filtro de disciplina solo cuando NO está agrupado por equipos -->
+      <div class="col-lg-3 col-md-5" *ngIf="!agruparPorEquipo">
+        <select class="form-select filter-select" [(ngModel)]="disciplinaFiltro" (change)="cambiarDisciplina()">
+          <option *ngFor="let d of disciplinas" [value]="d.valor">
+            {{ d.nombre }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Ordenamiento individual cuando NO está agrupado -->
+      <div class="col-lg-3 col-md-5" *ngIf="!agruparPorEquipo">
+        <select class="form-select filter-select" [(ngModel)]="ordenTiempo" (change)="cambiarOrdenTiempo()">
+          <option value="ninguno">Sin ordenar</option>
+          <option value="asc"> Más rápidos primero</option>
+          <option value="desc">Más lentos primero</option>
+        </select>
+      </div>
+
+      <!-- Ordenamiento de equipos cuando SÍ está agrupado -->
+      <div class="col-lg-6 col-md-10" *ngIf="agruparPorEquipo">
+        <select class="form-select filter-select" [(ngModel)]="ordenEquipos" (change)="cambiarOrdenEquipos()">
+          <option value="asc">Ordenado de Menor a Mayor Tiempo (Más rápidos primero)</option>
+          <option value="desc">Ordenado de Mayor a Menor Tiempo (Más lentos primero)</option>
+        </select>
+      </div>
+
+      <!-- Botón toggle siempre a la derecha -->
+      <div class="col-lg-2 col-md-2">
+        <button class="btn btn-toggle w-100" [class.active]="agruparPorEquipo" (click)="toggleAgruparPorEquipo()">
+          <i class="bi" [ngClass]="agruparPorEquipo ? 'bi-list-ul' : 'bi-people-fill'"></i>
+          {{ agruparPorEquipo ? 'Lista' : 'Equipos' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+      <div class="results-count" *ngIf="!agruparPorEquipo">
+        <i class="bi bi-person-fill me-2"></i>
+        <span>{{participantes2024Filtrados.length}} de {{participantes2024.length}} participantes</span>
+      </div>
+      <div class="results-count" *ngIf="agruparPorEquipo">
+        <i class="bi bi-people-fill me-2"></i>
+        <span>{{equiposAgrupados.length}} equipos</span>
+      </div>
+      <a [href]="urlExcelCompleto" target="_blank" class="btn-excel-completo" *ngIf="urlExcelCompleto">
+        <i class="bi bi-file-earmark-spreadsheet me-2"></i>
+        Ver Excel con resultados completos
+      </a>
+    </div>
+  </div>
+
+  <div *ngIf="!loading; else loadingTemplate">
+    <!-- Vista normal (sin agrupar) -->
+    <div *ngIf="!agruparPorEquipo" class="table-responsive">
+      <table class="table table-hover">
+        <thead class="table-light">
+          <tr>
+            <th>Nombre</th>
+            <th>Equipo</th>
+            <th>Disciplina</th>
+            <th>Tiempo</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of participantes2024Filtrados">
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.equipoNombre || ' ' }}</td>
+            <td>
+              <i class="bi {{ getIconoDisciplina(p.disciplina) }} me-2"></i>
+              {{ getNombreDisciplina(p.disciplina) }}
+            </td>
+            <td class="font-monospace">{{ formatearTiempo(p.tiempo) }}</td>
+            <td>
+              <span *ngIf="p.penalizado" class="badge bg-danger">
+                <i class="bi bi-exclamation-triangle me-1"></i>
+                Penalizado
+              </span>
+              <span *ngIf="!p.penalizado" class="badge bg-success">
+                <i class="bi bi-check-circle me-1"></i>
+                Sin penalización
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="participantes2024Filtrados.length === 0" class="alert alert-warning">
+        No se encontraron participantes con ese criterio de búsqueda
+      </div>
+    </div>
+
+    <!-- Vista agrupada por equipos -->
+    <div *ngIf="agruparPorEquipo" class="equipos-container">
+      <div *ngFor="let equipo of equiposAgrupados" class="equipo-card">
+        <div class="equipo-header">
+          <div class="equipo-info">
+            <span class="equipo-posicion">#{{ equipo.posicion }}</span>
+            <h4 class="equipo-nombre">
+              <i class="bi bi-people-fill me-2"></i>
+              {{ equipo.nombre }}
+            </h4>
+          </div>
+          <div class="equipo-tiempo-total">
+            <span class="tiempo-label">Tiempo Total</span>
+            <span class="tiempo-valor font-monospace">{{ equipo.tiempoTotalFormateado }}</span>
+          </div>
+        </div>
+        <div class="equipo-body">
+          <div class="row g-3">
+            <div *ngFor="let p of equipo.participantes" class="col-md-4">
+              <div class="participante-card">
+                <div class="participante-nombre">
+                  <strong>{{ p.nombre }}</strong>
+                </div>
+                <div class="participante-info">
+                  <div class="info-item">
+                    <i class="bi {{ getIconoDisciplina(p.disciplina) }} me-2"></i>
+                    <span>{{ getNombreDisciplina(p.disciplina) }}</span>
+                  </div>
+                  <div class="info-item tiempo-item">
+                    <i class="bi bi-stopwatch me-2"></i>
+                    <span class="font-monospace">{{ formatearTiempo(p.tiempo) }}</span>
+                  </div>
+                  <div class="info-item" *ngIf="p.penalizado">
+                    <span class="badge bg-danger badge-small">
+                      <i class="bi bi-exclamation-triangle me-1"></i>
+                      Penalizado
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="equiposAgrupados.length === 0" class="alert alert-warning">
+        No se encontraron equipos con ese criterio de búsqueda
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <app-loading></app-loading>
+  </ng-template>
+</div>

@@ -1,0 +1,558 @@
+<!-- Notificaciones emergentes (fuera del contenedor para position fixed) -->
+<div class="notificacion-emergente notificacion-success" *ngIf="successMessage">
+  <div class="notificacion-contenido">
+    <div class="notificacion-icono">
+      <i class="bi bi-check-circle-fill"></i>
+    </div>
+    <div class="notificacion-texto">
+      <h6 class="notificacion-titulo">¡Éxito!</h6>
+      <p class="notificacion-mensaje">{{ successMessage }}</p>
+    </div>
+    <button type="button" class="notificacion-cerrar" (click)="cerrarNotificacion('success')">
+      <i class="bi bi-x"></i>
+    </button>
+  </div>
+</div>
+
+<div class="notificacion-emergente notificacion-error" *ngIf="errorMessage">
+  <div class="notificacion-contenido">
+    <div class="notificacion-icono">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+    </div>
+    <div class="notificacion-texto">
+      <h6 class="notificacion-titulo">Error</h6>
+      <p class="notificacion-mensaje">{{ errorMessage }}</p>
+    </div>
+    <button type="button" class="notificacion-cerrar" (click)="cerrarNotificacion('error')">
+      <i class="bi bi-x"></i>
+    </button>
+  </div>
+</div>
+
+<div class="gestion-imagenes-container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="page-title">
+          <i class="bi bi-clipboard-check me-2"></i>
+          Gestión de Solicitudes de Inscripción
+        </h2>
+      </div>
+    </div>
+
+    <!-- Pestañas de vista -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <button class="nav-link" [class.active]="vistaActual === 'pendientes'" (click)="cambiarVista('pendientes')">
+              <i class="bi bi-hourglass-split me-2"></i>
+              Solicitudes Pendientes
+              <span class="badge bg-warning text-dark ms-2" *ngIf="vistaActual === 'pendientes'">{{ equipos.length
+                }}</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" [class.active]="vistaActual === 'aprobados'" (click)="cambiarVista('aprobados')">
+              <i class="bi bi-check-circle me-2"></i>
+              Equipos Aprobados
+              <span class="badge badge-institucional ms-2" *ngIf="vistaActual === 'aprobados'">{{ equipos.length
+                }}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row g-3 align-items-end">
+              <div class="col-md-10">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-search me-1"></i>
+                  Buscar por nombre
+                </label>
+                <input type="text" class="form-control" placeholder="Escribe el nombre del equipo..."
+                  [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" />
+              </div>
+
+              <div class="col-md-2">
+                <button class="btn btn-outline-secondary w-100" (click)="clearFilters()" [disabled]="!searchTerm">
+                  <i class="bi bi-x-circle me-1"></i>
+                  Limpiar
+                </button>
+              </div>
+            </div>
+
+            <div class="mt-3" *ngIf="searchTerm">
+              <small class="text-muted">
+                <i class="bi bi-funnel me-1"></i>
+                Mostrando {{ equiposFiltrados.length }} de {{ equipos.length }} solicitudes
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de solicitudes -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card images-list-card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0" *ngIf="vistaActual === 'pendientes'">
+              <i class="bi bi-hourglass-split me-2"></i>
+              Solicitudes Pendientes
+              <span class="badge bg-warning text-dark ms-2">{{ equipos.length }}</span>
+            </h5>
+            <h5 class="mb-0" *ngIf="vistaActual === 'aprobados'">
+              <i class="bi bi-check-circle me-2"></i>
+              Equipos Aprobados
+              <span class="badge badge-institucional ms-2">{{ equipos.length }}</span>
+            </h5>
+            <button class="btn btn-sm btn-refrescar" (click)="loadEquipos()" title="Refrescar lista">
+              <i class="bi bi-arrow-clockwise"></i>
+            </button>
+          </div>
+
+          <div class="card-body">
+            <app-loading *ngIf="loadingEquipos"></app-loading>
+
+            <div *ngIf="!loadingEquipos && equipos.length === 0 && vistaActual === 'pendientes'"
+              class="text-center py-5">
+              <i class="bi bi-check-circle" style="font-size: 3rem; color: #28a745;"></i>
+              <p class="text-muted mt-3">No hay solicitudes pendientes de aprobación</p>
+            </div>
+
+            <div *ngIf="!loadingEquipos && equipos.length === 0 && vistaActual === 'aprobados'"
+              class="text-center py-5">
+              <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+              <p class="text-muted mt-3">No hay equipos aprobados</p>
+            </div>
+
+            <div *ngIf="!loadingEquipos && equipos.length > 0 && equiposFiltrados.length === 0"
+              class="text-center py-5">
+              <i class="bi bi-search" style="font-size: 3rem; color: #ccc;"></i>
+              <p class="text-muted mt-3">No se encontraron solicitudes con los filtros aplicados</p>
+              <button class="btn btn-outline-primary btn-sm" (click)="clearFilters()">
+                <i class="bi bi-x-circle me-1"></i>
+                Limpiar filtros
+              </button>
+            </div>
+
+            <div class="images-grid" *ngIf="!loadingEquipos && equiposFiltrados.length > 0">
+              <div class="image-item d-flex justify-content-between align-items-center"
+                *ngFor="let equipo of equiposFiltrados">
+                <div class="image-info">
+                  <h6 class="image-title mb-1">
+                    <i class="bi bi-people-fill me-2"></i>
+                    {{ equipo.nombre }}
+                  </h6>
+                  <p class="image-description mb-0">
+                    <small class="text-muted d-block">
+                      <i class="bi bi-calendar-event me-1"></i>
+                      Solicitud recibida: {{ formatDate(equipo.created_at) }}
+                    </small>
+                  </p>
+                </div>
+
+                <div class="image-actions d-flex align-items-center">
+                  <!-- Botón único para solicitudes pendientes -->
+                  <ng-container *ngIf="vistaActual === 'pendientes'">
+                    <button class="btn btn-sm btn-revisar-solicitud" (click)="abrirRevisionCompleta(equipo)"
+                      title="Revisar solicitud">
+                      <i class="bi bi-clipboard-check me-1"></i>
+                      Revisar Solicitud
+                    </button>
+                  </ng-container>
+
+                  <!-- Botones para equipos aprobados -->
+                  <ng-container *ngIf="vistaActual === 'aprobados'">
+                    <button class="btn btn-sm btn-info me-2" (click)="verDocumento(equipo)" title="Ver documentos PDF">
+                      <i class="bi bi-file-pdf"></i>
+                    </button>
+                    <button class="btn btn-sm btn-secondary-custom me-2" (click)="verParticipantes(equipo)"
+                      title="Ver participantes">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-warning" (click)="openDisapproveModal(equipo)"
+                      title="Desaprobar equipo">
+                      <i class="bi bi-x-circle"></i>
+                    </button>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Aprobar -->
+    <div class="modal fade show d-block modal-confirmacion" tabindex="-1" *ngIf="showApproveModal"
+      style="z-index: 1060;">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title">
+              <i class="bi bi-check-circle me-2"></i> Aprobar Solicitud
+            </h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeApproveModal()"></button>
+          </div>
+          <div class="modal-body">
+            <p>¿Estás seguro de que deseas aprobar la solicitud del equipo <strong>{{ equipoSelected?.nombre
+                }}</strong>?</p>
+            <p class="text-muted small">Se enviará un correo de confirmación al delegado del equipo con el enlace al
+              grupo de WhatsApp.</p>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">Mensaje adicional (opcional)</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="mensajeAprobacion"
+                placeholder="Puedes agregar un mensaje personalizado que se incluirá en el correo..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeApproveModal()" [disabled]="processingAction">
+              Cancelar
+            </button>
+            <button class="btn btn-success" (click)="aprobarEquipo()" [disabled]="processingAction">
+              <span *ngIf="!processingAction">
+                <i class="bi bi-check-circle me-1"></i> Aprobar
+              </span>
+              <span *ngIf="processingAction">
+                <span class="spinner-border spinner-border-sm me-1"></span> Procesando...
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop fade show backdrop-confirmacion" *ngIf="showApproveModal" style="z-index: 1055;"></div>
+
+    <!-- Modal Rechazar -->
+    <div class="modal fade show d-block modal-confirmacion" tabindex="-1" *ngIf="showRejectModal"
+      style="z-index: 1060;">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title">
+              <i class="bi bi-x-circle me-2"></i> Rechazar Solicitud
+            </h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeRejectModal()"></button>
+          </div>
+          <div class="modal-body">
+            <p>¿Estás seguro de que deseas rechazar la solicitud del equipo <strong>{{ equipoSelected?.nombre
+                }}</strong>?</p>
+            <p class="text-danger small">
+              <i class="bi bi-exclamation-triangle me-1"></i>
+              Esta acción eliminará permanentemente el equipo y todos sus participantes. Se enviará un correo de
+              notificación al delegado.
+            </p>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">Razón del rechazo <span class="text-danger">*</span></label>
+              <textarea class="form-control" rows="4" [(ngModel)]="mensajeRechazo" required
+                placeholder="Explica la razón del rechazo. Este mensaje se enviará al delegado del equipo..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeRejectModal()" [disabled]="processingAction">
+              Cancelar
+            </button>
+            <button class="btn btn-danger" (click)="rechazarEquipo()"
+              [disabled]="processingAction || !mensajeRechazo.trim()">
+              <span *ngIf="!processingAction">
+                <i class="bi bi-x-circle me-1"></i> Rechazar
+              </span>
+              <span *ngIf="processingAction">
+                <span class="spinner-border spinner-border-sm me-1"></span> Procesando...
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop fade show backdrop-confirmacion" *ngIf="showRejectModal" style="z-index: 1055;"></div>
+
+    <!-- Modal Ver Participantes -->
+    <div class="modal fade show d-block" tabindex="-1" *ngIf="showParticipantsModal">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+          <div class="modal-header bg-dark text-white">
+            <h5 class="modal-title">
+              <i class="bi bi-people me-2"></i> Participantes de {{ equipoSelected?.nombre }}
+            </h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeParticipantsModal()"></button>
+          </div>
+          <div class="modal-body">
+            <app-loading *ngIf="loadingParticipantes"></app-loading>
+
+            <div *ngIf="!loadingParticipantes && participantes.length === 0" class="text-center py-4 text-muted">
+              <i class="bi bi-person-x" style="font-size: 2rem;"></i>
+              <p>No hay participantes registrados para este equipo.</p>
+            </div>
+
+            <div *ngIf="!loadingParticipantes && participantes.length > 0" class="row g-3">
+              <div class="col-md-4" *ngFor="let p of participantes">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body">
+                    <h6 class="card-title fw-bold">{{ p.nombre }}</h6>
+                    <p class="card-text mb-1"><strong>Género:</strong> {{ p.genero || 'No especificado' }}</p>
+                    <p class="card-text mb-1"><strong>Seccional:</strong> {{ p.seccional || 'No especificado' }}</p>
+                    <p class="card-text mb-1"><strong>Rol:</strong> {{ p.rol || 'No especificado' }}</p>
+                    <p class="card-text mb-1"><strong>Disciplina:</strong> {{ p.disciplina || 'No especificado' }}</p>
+                    <p class="card-text mb-1"><strong>Disciplina Ascun:</strong> {{ p.disciplina_ascun || 'No
+                      especificado' }}</p>
+                    <p class="card-text mb-1" *ngIf="p.delegado">
+                      <span class="badge bg-dark">
+                        <i class="bi bi-star-fill me-1"></i>Delegado del grupo
+                      </span>
+                    </p>
+                    <hr class="my-2">
+                    <p class="card-text mb-1"><strong>Datos de contacto:</strong></p>
+                    <p class="card-text mb-0"><strong>Correo:</strong> {{ p.correo }}</p>
+                    <p class="card-text mb-0"><strong>Teléfono:</strong> {{ p.telefono }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop fade show" *ngIf="showParticipantsModal"></div>
+
+    <!-- Modal de Revisión Completa -->
+    <div class="modal fade show d-block" [class.modal-difuminado]="showApproveModal || showRejectModal" tabindex="-1"
+      *ngIf="showReviewModal">
+      <div class="modal-dialog modal-dialog-centered modal-fullscreen-lg-down" style="max-width: 95%;">
+        <div class="modal-content">
+          <div class="modal-header modal-header-revision">
+            <h5 class="modal-title">
+              <i class="bi bi-clipboard-check me-2"></i> Revisión de Solicitud: {{ equipoSelected?.nombre }}
+            </h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeReviewModal()"></button>
+          </div>
+          <div class="modal-body p-0">
+            <app-loading *ngIf="loadingParticipantes"></app-loading>
+
+            <div *ngIf="!loadingParticipantes" class="row g-0">
+              <!-- Columna izquierda: PDF -->
+              <div class="col-lg-6 border-end">
+                <div class="p-3 bg-light border-bottom">
+                  <h6 class="mb-0">
+                    <i class="bi bi-file-pdf me-2"></i>
+                    Documentos del Equipo
+                  </h6>
+                </div>
+                <div class="pdf-container">
+                  <div *ngIf="!equipoSelected?.documento_id" class="text-center py-5">
+                    <i class="bi bi-file-earmark-x" style="font-size: 3rem; color: #ccc;"></i>
+                    <p class="text-muted mt-3">No hay documentos disponibles</p>
+                  </div>
+
+                  <iframe *ngIf="cachedDocumentUrl" [src]="cachedDocumentUrl"
+                    class="pdf-iframe" frameborder="0">
+                  </iframe>
+                </div>
+              </div>
+
+              <!-- Columna derecha: Información del equipo -->
+              <div class="col-lg-6">
+                <div class="p-3 bg-light border-bottom">
+                  <h6 class="mb-0">
+                    <i class="bi bi-people me-2"></i>
+                    Información del Equipo
+                  </h6>
+                </div>
+                <div style="height: 70vh; overflow-y: auto;" class="p-4">
+                  <!-- Información general -->
+                  <div class="mb-4">
+                    <h6 class="fw-bold titulo-seccion-revision mb-3">
+                      <i class="bi bi-info-circle me-2"></i>
+                      Datos Generales
+                    </h6>
+                    <div class="card">
+                      <div class="card-body">
+                        <p class="mb-2"><strong>Nombre del equipo:</strong> {{ equipoSelected?.nombre }}</p>
+                        <p class="mb-0">
+                          <strong>Fecha de solicitud:</strong>
+                          {{ formatDate(equipoSelected?.created_at || '') }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Participantes -->
+                  <div class="mb-4">
+                    <h6 class="fw-bold titulo-seccion-revision mb-3">
+                      <i class="bi bi-people-fill me-2"></i>
+                      Participantes ({{ participantes.length }})
+                    </h6>
+
+                    <div *ngIf="participantes.length === 0" class="text-center py-4 text-muted">
+                      <i class="bi bi-person-x" style="font-size: 2rem;"></i>
+                      <p>No hay participantes registrados</p>
+                    </div>
+
+                    <div class="row g-3">
+                      <div class="col-12" *ngFor="let p of participantes; let i = index">
+                        <div class="card shadow-sm">
+                          <div class="card-header" [class.bg-warning]="p.delegado" [class.bg-light]="!p.delegado">
+                            <h6 class="mb-0 fw-bold">
+                              <i class="bi bi-person-circle me-2"></i>
+                              Participante {{ i + 1 }}
+                              <span class="badge bg-dark ms-2" *ngIf="p.delegado">
+                                <i class="bi bi-star-fill me-1"></i>Delegado
+                              </span>
+                            </h6>
+                          </div>
+                          <div class="card-body">
+                            <div class="row g-2">
+                              <div class="col-md-6">
+                                <p class="mb-1"><strong>Nombre:</strong> {{ p.nombre }}</p>
+                              </div>
+                              <div class="col-md-6">
+                                <p class="mb-1"><strong>Género:</strong> {{ p.genero || 'No especificado' }}</p>
+                              </div>
+                              <div class="col-md-6">
+                                <p class="mb-1"><strong>Seccional:</strong> {{ p.seccional || 'No especificado' }}</p>
+                              </div>
+                              <div class="col-md-6">
+                                <p class="mb-1"><strong>Rol:</strong> {{ p.rol || 'No especificado' }}</p>
+                              </div>
+                              <div class="col-md-6">
+                                <p class="mb-1"><strong>Disciplina:</strong> {{ p.disciplina || 'No especificado' }}</p>
+                              </div>
+                              <div class="col-md-6">
+                                <p class="mb-1"><strong>Disciplina ASCUN:</strong> {{ p.disciplina_ascun || 'Ninguna' }}
+                                </p>
+                              </div>
+                              <div class="col-12">
+                                <hr class="my-2">
+                                <p class="mb-1"><strong>Correo:</strong> {{ p.correo }}</p>
+                                <p class="mb-0"><strong>Teléfono:</strong> {{ p.telefono }}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer bg-light">
+            <div class="d-flex justify-content-between w-100 align-items-center flex-wrap gap-2">
+              <div>
+                <a *ngIf="equipoSelected?.documento_id" [href]="getDownloadUrl(equipoSelected?.documento_id)"
+                  target="_blank" class="btn btn-descargar-pdf btn-sm">
+                  <i class="bi bi-download me-1"></i> Descargar PDF
+                </a>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-secondary" (click)="closeReviewModal()" [disabled]="processingAction">
+                  <i class="bi bi-x-circle me-1"></i> Cerrar
+                </button>
+                <button class="btn btn-danger" (click)="openRejectModalFromReview()" [disabled]="processingAction">
+                  <i class="bi bi-x-circle me-1"></i> Rechazar
+                </button>
+                <button class="btn btn-success" (click)="openApproveModalFromReview()" [disabled]="processingAction">
+                  <i class="bi bi-check-circle me-1"></i> Aprobar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop fade show backdrop-revision" *ngIf="showReviewModal"></div>
+
+    <!-- Modal Desaprobar -->
+    <div class="modal fade show d-block" tabindex="-1" *ngIf="showDisapproveModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-warning text-dark">
+            <h5 class="modal-title">
+              <i class="bi bi-exclamation-triangle me-2"></i> Desaprobar Equipo
+            </h5>
+            <button type="button" class="btn-close" (click)="closeDisapproveModal()"></button>
+          </div>
+          <div class="modal-body">
+            <p>¿Estás seguro de que deseas desaprobar al equipo <strong>{{ equipoSelected?.nombre }}</strong>?</p>
+            <p class="text-muted small">
+              <i class="bi bi-info-circle me-1"></i>
+              El equipo volverá al estado de solicitud pendiente. Esta acción es útil cuando se aprueba un equipo por
+              error.
+            </p>
+            <p class="text-warning small">
+              <i class="bi bi-exclamation-triangle me-1"></i>
+              <strong>Nota:</strong> No se enviará correo de notificación al delegado.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeDisapproveModal()" [disabled]="processingAction">
+              Cancelar
+            </button>
+            <button class="btn btn-warning text-dark" (click)="desaprobarEquipo()" [disabled]="processingAction">
+              <span *ngIf="!processingAction">
+                <i class="bi bi-x-circle me-1"></i> Desaprobar
+              </span>
+              <span *ngIf="processingAction">
+                <span class="spinner-border spinner-border-sm me-1"></span> Procesando...
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop fade show" *ngIf="showDisapproveModal"></div>
+
+    <!-- Modal Ver Documento PDF -->
+    <div class="modal fade show d-block" tabindex="-1" *ngIf="showDocumentModal">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+          <div class="modal-header modal-header-documento">
+            <h5 class="modal-title">
+              <i class="bi bi-file-pdf me-2"></i> Documentos de {{ equipoSelected?.nombre }}
+            </h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeDocumentModal()"></button>
+          </div>
+          <div class="modal-body p-0">
+            <div class="pdf-container-documento">
+              <div *ngIf="!equipoSelected?.documento_id" class="text-center py-5">
+                <i class="bi bi-file-earmark-x" style="font-size: 3rem; color: #ccc;"></i>
+                <p class="text-muted mt-3">No hay documentos disponibles para este equipo</p>
+              </div>
+
+              <iframe *ngIf="equipoSelected?.documento_id" [src]="getDocumentUrl(equipoSelected?.documento_id)"
+                class="pdf-iframe" frameborder="0">
+              </iframe>
+            </div>
+          </div>
+          <div class="modal-footer bg-light">
+            <a *ngIf="equipoSelected?.documento_id" [href]="getDownloadUrl(equipoSelected?.documento_id)"
+              target="_blank" class="btn btn-descargar-pdf me-2">
+              <i class="bi bi-download me-1"></i> Descargar PDF
+            </a>
+            <button type="button" class="btn btn-secondary" (click)="closeDocumentModal()">
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop fade show backdrop-revision" *ngIf="showDocumentModal"></div>
+
+  </div>
+</div>

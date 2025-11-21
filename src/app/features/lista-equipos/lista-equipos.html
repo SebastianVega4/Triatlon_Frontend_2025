@@ -1,0 +1,44 @@
+<div class="container">
+    <h2>Lista de Equipos</h2>
+    
+    <!-- Añadir barra de búsqueda -->
+    <div class="mb-4">
+      <div class="input-group">
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Buscar equipo por nombre..." 
+          [(ngModel)]="terminoBusqueda"
+          (input)="filtrarEquipos()"
+        >
+        <span class="input-group-text">
+          <i class="bi bi-search"></i>
+        </span>
+      </div>
+    </div>
+  
+    <app-loading *ngIf="loading"></app-loading>
+  
+    <div *ngIf="!loading" class="equipos-list">
+      <div *ngIf="!resultadosVisibles" class="alert alert-info">
+        Los resultados están ocultos temporalmente. Por favor, espere a la ceremonia de premiación.
+      </div>
+  
+      <!-- Mostrar mensaje si no hay resultados -->
+      <div *ngIf="equiposFiltrados.length === 0" class="alert alert-warning">
+        No se encontraron equipos con ese nombre
+      </div>
+  
+      <!-- Usar equiposFiltrados en lugar de equipos -->
+      <div *ngFor="let equipo of equiposFiltrados" class="equipo-card">
+        <h3>
+          <a [routerLink]="['/equipo', equipo.id]">{{ equipo.nombre }}</a>
+        </h3>
+        
+        <div *ngIf="resultadosVisibles" class="equipo-info">
+          <p>Tiempo total: {{ equipo.tiempo_total || 'Sin registrar' }}</p>
+          <p *ngIf="equipo.penalizacion" class="penalizado">⚠️ Penalizado</p>
+        </div>
+      </div>
+    </div>
+  </div>

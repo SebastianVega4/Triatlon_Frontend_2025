@@ -1,0 +1,133 @@
+:root {
+  --color-institucional: #fecb00;
+  --color-secundario: #000000;
+  --color-terciario: #f8f9fa;
+}
+
+.navbar {
+  background-color: var(--color-secundario);
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.navbar-brand {
+  color: white;
+  font-weight: bold;
+}
+
+.navbar-brand img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.nav-link {
+  color: rgba(255,255,255,.8);
+  font-weight: 500;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  color: var(--color-institucional);
+}
+
+.nav-link.active {
+  color: var(--color-institucional);
+}
+
+// Estilos del modal
+.admin-modal-header {
+  background-color: var(--color-secundario);
+  color: white;
+}
+
+.btn-admin-login {
+  background-color: var(--color-institucional);
+  color: var(--color-secundario);
+  border: none;
+  font-weight: bold;
+}
+
+.btn-admin-login:hover {
+  background-color: #e0b000;
+  color: var(--color-secundario);
+}
+
+.modal {
+  z-index: 1055;
+}
+
+.modal-backdrop {
+  z-index: 1050;
+}
+
+// Estilos para dropdowns
+.nav-item.dropdown {
+  position: relative;
+
+  .dropdown-toggle::after {
+    margin-left: 0.3em;
+    vertical-align: 0.15em;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin: 0;
+    background-color: var(--color-secundario);
+    border: 1px solid rgba(254, 203, 0, 0.2);
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+    &.show {
+      display: block;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 1.25rem;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: pointer;
+
+      i {
+        color: var(--color-institucional);
+      }
+
+      &:hover {
+        background-color: rgba(254, 203, 0, 0.1);
+        color: var(--color-institucional);
+      }
+
+      &:active {
+        background-color: rgba(254, 203, 0, 0.2);
+      }
+    }
+  }
+}
+
+// Responsive: Dropdowns en móvil
+@media (max-width: 991px) {
+  .nav-item.dropdown {
+    .dropdown-menu {
+      position: static;
+      float: none;
+      width: auto;
+      margin-top: 0;
+      background-color: rgba(255, 255, 255, 0.05);
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+
+      .dropdown-item {
+        padding-left: 2rem;
+      }
+    }
+  }
+}

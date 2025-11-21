@@ -1,0 +1,35 @@
+<!-- Sección de encabezado -->
+<section class="about-header">
+  <div class="container">
+    <h1 class="about-title">Acerca del Proyecto</h1>
+    <p class="about-subtitle">
+      Este proyecto web fue realizado con el propósito de brindar una solución innovadora a una necesidad real dentro de
+      nuestra comunidad universitaria.
+      Nuestro objetivo principal es optimizar la gestión de procesos y mejorar la experiencia de los participantes de la
+      triatlón,
+      ofreciendo una herramienta moderna, eficiente y accesible.
+    </p>
+  </div>
+</section>
+
+<!-- Sección del equipo -->
+<section class="team-section">
+  <div class="container">
+    <h2 class="section-title">Nuestro Equipo</h2>
+    <p class="team-intro">Conoce a las personas que hacen posible este proyecto</p>
+
+    <!-- Grid -->
+    <div class="team-grid">
+      <div class="team-card" *ngFor="let miembro of equipo; let i = index" [attr.data-index]="i">
+        <div class="team-card-image" [ngClass]="'member-' + i">
+          <img [src]="miembro.imagen" [alt]="miembro.nombre" />
+        </div>
+        <div class="team-card-body">
+          <h5 class="team-card-name">{{ miembro.nombre }}</h5>
+          <span class="team-card-role">{{ miembro.rol }}</span>
+          <p class="team-card-description">{{ miembro.descripcion }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,168 @@
+<div class="container mt-4 mb-5">
+  <h2>
+    <i class="bi bi-stopwatch"></i>
+    Gestión de Tiempos
+  </h2>
+
+  <!-- Barra de búsqueda -->
+  <div class="mb-4">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Buscar equipo por nombre..." [(ngModel)]="terminoBusqueda"
+        (input)="filtrarEquipos()" />
+      <span class="input-group-text">
+        <i class="bi bi-search"></i>
+      </span>
+    </div>
+    <div class="results-count mt-3">
+      <i class="bi bi-people-fill me-2"></i>
+      <span>{{equiposFiltrados.length}} de {{equipos.length}} equipos</span>
+    </div>
+  </div>
+
+  <!-- Tabla de equipos -->
+  <div *ngIf="!loading; else loadingTemplate">
+    <div *ngIf="equiposFiltrados.length === 0" class="alert alert-warning">
+      No se encontraron equipos con ese criterio de búsqueda
+    </div>
+
+    <div *ngIf="equiposFiltrados.length > 0" class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Equipo</th>
+            <th>Tiempo Total</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let equipo of equiposFiltrados">
+            <td>
+              <strong>{{ equipo.nombre }}</strong>
+            </td>
+            <td>
+              <span class="badge badge-tiempo">
+                <i class="bi bi-stopwatch me-1"></i>
+                {{ equipo.tiempo_total || '--:--:--' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary" (click)="abrirModalEquipo(equipo.id)"
+                title="Editar tiempos">
+                <i class="bi bi-stopwatch me-1"></i>
+                Editar Tiempos
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <app-loading></app-loading>
+  </ng-template>
+</div>
+
+<!-- Modal de edición de tiempos -->
+<div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
+  <div class="modal-tiempos" (click)="$event.stopPropagation()">
+    <!-- Pestañas de navegación entre equipos -->
+    <div class="modal-tabs">
+      <button *ngFor="let equipo of equipos" class="tab-btn" [class.active]="equipoSeleccionado?.id === equipo.id"
+        (click)="cambiarEquipo(equipo.id)">
+        {{ equipo.nombre }}
+      </button>
+    </div>
+
+    <!-- Contenido del modal -->
+    <div class="modal-header-custom">
+      <div class="modal-title-section">
+        <h3>
+          <i class="bi bi-people-fill me-2"></i>
+          {{ equipoSeleccionado?.nombre }}
+        </h3>
+        <p class="mb-0">
+          <i class="bi bi-stopwatch me-2"></i>
+          Tiempo total: <strong>{{ equipoSeleccionado?.tiempo_total || '--:--:--' }}</strong>
+        </p>
+      </div>
+      <button class="btn-close-modal" (click)="cerrarModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="modal-body-custom">
+      <h4>
+        <i class="bi bi-person-badge me-2"></i>
+        Participantes
+      </h4>
+
+      <div class="table-responsive">
+        <table class="table table-participantes">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Género</th>
+              <th>Disciplina</th>
+              <th>Tiempo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let participante of participantes">
+              <td>
+                <strong>{{ participante.nombre }}</strong>
+              </td>
+              <td>
+                {{ participante.genero === 'masculino' ? 'Masculino' : 'Femenino' }}
+              </td>
+              <td>
+                <i class="bi {{ getIconoDisciplina(participante.disciplina) }} me-2"></i>
+                {{ participante.disciplina | titlecase }}
+              </td>
+              <td>
+                <div class="tiempo-cell">
+                  <span *ngIf="!tiempoEditando[participante.id]" class="time-display">
+                    {{ participante.tiempo || '--:--:--' }}
+                  </span>
+
+                  <button *ngIf="!tiempoEditando[participante.id]" class="btn btn-sm btn-outline-primary"
+                    (click)="editarTiempo(participante.id)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+
+                  <div *ngIf="tiempoEditando[participante.id]" class="tiempo-edit">
+                    <input type="text" class="form-control time-input" #tiempoInput
+                      [value]="participante.tiempo || '00:00:00'" placeholder="HH:MM:SS"
+                      (input)="formatTimeInput($event, participante.id)" maxlength="12" />
+                    <div class="btn-group-edit">
+                      <button class="btn btn-success btn-sm" (click)="guardarTiempo(participante, tiempoInput.value)">
+                        <i class="bi bi-check"></i>
+                      </button>
+                      <button class="btn btn-outline-secondary btn-sm"
+                        (click)="tiempoEditando[participante.id] = false">
+                        <i class="bi bi-x"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn btn-sm btn-warning" (click)="aplicarPenalizacion(participante)"
+                    [disabled]="!participante.disciplina" title="Aplicar penalización">
+                    <i class="bi bi-exclamation-triangle"></i>
+                  </button>
+                  <button class="btn btn-sm btn-info" (click)="asignarPremioEspecial(participante)"
+                    title="Asignar premio especial">
+                    <i class="bi bi-award"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

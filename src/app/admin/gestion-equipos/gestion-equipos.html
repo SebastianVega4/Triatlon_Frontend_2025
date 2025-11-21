@@ -1,0 +1,282 @@
+<div class="gestion-imagenes-container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="page-title">
+          <i class="bi bi-people-fill me-2"></i>
+          Gestión de Equipos
+        </h2>
+      </div>
+    </div>
+
+    <!-- Mensajes -->
+    <div class="row" *ngIf="successMessage || errorMessage">
+      <div class="col-12">
+        <div class="alert alert-success alert-dismissible fade show" *ngIf="successMessage">
+          <i class="bi bi-check-circle me-2"></i>
+          {{ successMessage }}
+          <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+        </div>
+        <div class="alert alert-danger alert-dismissible fade show" *ngIf="errorMessage">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          {{ errorMessage }}
+          <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row g-3 align-items-end">
+              <!-- Búsqueda por nombre -->
+              <div class="col-md-6">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-search me-1"></i>
+                  Buscar por nombre
+                </label>
+                <input type="text" class="form-control" placeholder="Escribe el nombre del equipo..."
+                  [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" />
+              </div>
+
+              <!-- Filtro por año -->
+              <div class="col-md-4">
+                <label class="form-label fw-bold">
+                  <i class="bi bi-calendar-event me-1"></i>
+                  Filtrar por año
+                </label>
+                <select class="form-select" [(ngModel)]="selectedYear" (ngModelChange)="applyFilters()">
+                  <option value="">Todos los años</option>
+                  <option *ngFor="let year of availableYears" [value]="year">
+                    {{ year }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Botón limpiar filtros -->
+              <div class="col-md-2">
+                <button class="btn btn-outline-secondary w-100" (click)="clearFilters()"
+                  [disabled]="!searchTerm && !selectedYear">
+                  <i class="bi bi-x-circle me-1"></i>
+                  Limpiar
+                </button>
+              </div>
+            </div>
+
+            <!-- Contador de resultados -->
+            <div class="mt-3" *ngIf="searchTerm || selectedYear">
+              <small class="text-muted">
+                <i class="bi bi-funnel me-1"></i>
+                Mostrando {{ equiposFiltrados.length }} de {{ equipos.length }} equipos
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de equipos -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card images-list-card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="bi bi-collection me-2"></i>
+              Equipos Registrados
+            </h5>
+            <button class="btn btn-sm btn-refrescar" (click)="loadEquipos()" title="Refrescar lista">
+              <i class="bi bi-arrow-clockwise"></i>
+            </button>
+          </div>
+
+          <div class="card-body">
+            <!-- Loading -->
+            <app-loading *ngIf="loadingEquipos"></app-loading>
+
+            <!-- Sin equipos -->
+            <div *ngIf="!loadingEquipos && equipos.length === 0" class="text-center py-5">
+              <i class="bi bi-people" style="font-size: 3rem; color: #ccc;"></i>
+              <p class="text-muted mt-3">No hay equipos registrados</p>
+            </div>
+
+            <!-- Sin resultados de búsqueda -->
+            <div *ngIf="!loadingEquipos && equipos.length > 0 && equiposFiltrados.length === 0"
+              class="text-center py-5">
+              <i class="bi bi-search" style="font-size: 3rem; color: #ccc;"></i>
+              <p class="text-muted mt-3">No se encontraron equipos con los filtros aplicados</p>
+              <button class="btn btn-outline-primary btn-sm" (click)="clearFilters()">
+                <i class="bi bi-x-circle me-1"></i>
+                Limpiar filtros
+              </button>
+            </div>
+
+            <!-- Lista de equipos -->
+            <div class="images-grid" *ngIf="!loadingEquipos && equiposFiltrados.length > 0">
+              <div class="image-item d-flex justify-content-between align-items-center"
+                *ngFor="let equipo of equiposFiltrados">
+                <!-- Información del equipo -->
+                <div class="image-info">
+                  <h6 class="image-title mb-1">{{ equipo.nombre }}</h6>
+                  <p class="image-description mb-0">
+                    <strong>Tiempo total:</strong> {{ equipo.tiempo_total || '—' }}<br>
+                    <strong>Posición:</strong> {{ equipo.posicion || '—' }}<br>
+                    <strong>Penalizaciones:</strong><br>
+                  <ul class="list-unstyled ms-3 mb-1">
+                    <li>
+                      <i
+                        [ngClass]="equipo.penalizacion_natacion ? 'bi bi-x-circle text-danger' : 'bi bi-check-circle text-success'"></i>
+                      Natación
+                    </li>
+                    <li>
+                      <i
+                        [ngClass]="equipo.penalizacion_ciclismo ? 'bi bi-x-circle text-danger' : 'bi bi-check-circle text-success'"></i>
+                      Ciclismo
+                    </li>
+                    <li>
+                      <i
+                        [ngClass]="equipo.penalizacion_atletismo ? 'bi bi-x-circle text-danger' : 'bi bi-check-circle text-success'"></i>
+                      Atletismo
+                    </li>
+                  </ul>
+
+                  <strong>Penalización general:</strong>
+                  <span [ngClass]="equipo.penalizacion ? 'text-danger' : 'text-success'">
+                    {{ equipo.penalizacion ? 'Sí' : 'No' }}
+                  </span><br>
+
+                  <small class="text-muted d-block mt-2">
+                    <i class="bi bi-calendar-event me-1"></i>
+                    {{ formatDate(equipo.created_at) }}
+                  </small>
+
+                </div>
+
+                <!-- Acciones -->
+                <div class="image-actions d-flex align-items-center">
+                  <button class="btn btn-sm btn-warning me-2" (click)="openEditModal(equipo)" title="Penalizar equipo">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-ver-participantes me-2" (click)="verParticipantes(equipo)"
+                    title="Ver participantes">
+                    <i class="bi bi-people"></i>
+                  </button>
+                  <button class="btn btn-sm btn-danger" (click)="confirmDelete(equipo)" title="Rechazar equipo">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Eliminar -->
+    <div class="modal fade show d-block" tabindex="-1" *ngIf="showDeleteModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title">
+              <i class="bi bi-trash me-2"></i> Rechazar equipo
+            </h5>
+            <button type="button" class="btn-close" (click)="cancelDelete()"></button>
+          </div>
+          <div class="modal-body">
+            <p>Recuerde que al rechazar al equipo este se elimina permanentemente y debe inscribirse nuevamente </p>
+            <p>¿Estás seguro de que deseas eliminar a <strong>{{ equipoToDelete?.nombre }}</strong>?</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="cancelDelete()">Cancelar</button>
+            <button class="btn btn-danger" (click)="deleteEquipo()">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop fade show" *ngIf="showDeleteModal"></div>
+    <!-- Modal Editar -->
+    <div class="modal fade show d-block" tabindex="-1" *ngIf="showEditModal">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-warning text-dark">
+            <h5 class="modal-title">
+              <i class="bi bi-pencil me-2"></i> Penalizar equipo
+            </h5>
+            <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+          </div>
+          <div class="modal-body">
+            <form *ngIf="equipoToEdit">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label">Penalizacion General</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="equipoToEdit.penalizacion"
+                      name="penalizacion" />
+                    <label class="form-check-label">Penalizar a todo el equipo</label>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeEditModal()">Cancelar</button>
+            <button class="btn btn-warning text-dark fw-bold" (click)="saveEdit()">Guardar cambios</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop fade show" *ngIf="showEditModal"></div>
+    <!-- Modal Ver Participantes -->
+    <div class="modal fade show d-block" tabindex="-1" *ngIf="showParticipantsModal">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+          <div class="modal-header modal-header-participantes">
+            <h5 class="modal-title">
+              <i class="bi bi-people me-2"></i> Participantes de {{ equipoSelected?.nombre }}
+            </h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeParticipantsModal()"></button>
+          </div>
+          <div class="modal-body">
+            <app-loading *ngIf="loadingParticipantes"></app-loading>
+
+            <div *ngIf="!loadingParticipantes && participantes.length === 0" class="text-center py-4 text-muted">
+              <i class="bi bi-person-x" style="font-size: 2rem;"></i>
+              <p>No hay participantes registrados para este equipo.</p>
+            </div>
+            <div *ngIf="!loadingParticipantes && participantes.length > 0" class="row g-3">
+              <div class="col-md-4" *ngFor="let p of participantes">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body">
+                    <h6 class="card-title fw-bold">{{ p.nombre }}</h6>
+                    <p class="card-text mb-1"><strong>Género:</strong> {{ p.genero }}</p>
+                    <p class="card-text mb-1"><strong>Seccional:</strong> {{ p.seccional }}</p>
+                    <p class="card-text mb-1"><strong>Rol:</strong> {{ p.rol || 'No especificado' }}</p>
+                    <p class="card-text mb-1"><strong>Disciplina:</strong> {{ p.disciplina }}</p>
+                    <p class="card-text mb-1"><strong>Disciplina Ascun:</strong> {{ p.disciplina_ascun }}</p>
+                    <p class="card-text mb-1"><strong>Tiempo:</strong> {{ p.tiempo }}</p>
+                    <p class="card-text mb-1" *ngIf="p.delegado">
+                      <span class="badge bg-dark">
+                        <i class="bi bi-star-fill me-1"></i>Delegado del grupo
+                      </span>
+                    </p>
+                    <hr class="my-2">
+                    <p class="card-text mb-1"><strong>Datos de contacto:</strong></p>
+                    <p class="card-text mb-0"><strong>Correo: </strong>{{ p.correo }}</p>
+                    <p class="card-text mb-0"><strong>Teléfono: </strong>{{ p.telefono }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop fade show backdrop-participantes" *ngIf="showParticipantsModal"></div>
+
+  </div>
+</div>

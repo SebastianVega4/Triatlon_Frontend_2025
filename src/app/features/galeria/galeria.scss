@@ -1,0 +1,198 @@
+:root {
+  --color-institucional: #fecb00;
+  --color-secundario: #000000;
+  --color-terciario: #f8f9fa;
+}
+
+.gallery-header {
+  background-color: var(--color-secundario);
+  color: white;
+  padding: 60px 0;
+  text-align: center;
+}
+
+.gallery-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.gallery-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.gallery-content {
+  padding: 60px 0;
+  background-color: #f5f5f5;
+}
+
+.gallery-filter {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.filter-btn {
+  background-color: transparent;
+  border: 2px solid var(--color-secundario);
+  color: var(--color-secundario);
+  padding: 8px 20px;
+  margin: 0 5px;
+  border-radius: 30px;
+  font-weight: 500;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.filter-btn:hover, 
+.filter-btn.active {
+  background-color: var(--color-institucional);
+  border-color: var(--color-institucional);
+  color: var(--color-secundario);
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.gallery-item {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  height: 250px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.gallery-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.5s;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+.gallery-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  color: white;
+  padding: 20px;
+  transform: translateY(100%);
+  transition: all 0.5s;
+}
+
+.gallery-item:hover .gallery-overlay {
+  transform: translateY(0);
+}
+
+.gallery-year {
+  background-color: var(--color-institucional);
+  color: var(--color-secundario);
+  font-weight: bold;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+}
+
+.gallery-title-item {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.gallery-description {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.load-more {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.btn-load-more {
+  background-color: var(--color-institucional);
+  color: var(--color-secundario);
+  border: none;
+  padding: 12px 30px;
+  font-weight: bold;
+  border-radius: 50px;
+  transition: all 0.3s;
+}
+
+.btn-load-more:hover {
+  background-color: #e0b000;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  color: var(--color-secundario);
+}
+
+// Estilos del modal
+.modal {
+  z-index: 1055;
+}
+
+.modal-backdrop {
+  z-index: 1050;
+}
+
+.modal-content {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.modal-header {
+  background-color: var(--color-secundario);
+  color: white;
+  border: none;
+}
+
+.modal-body {
+  padding: 0;
+}
+
+.modal-image {
+  width: 100%;
+  height: auto;
+}
+
+.modal-info {
+  padding: 20px;
+  background-color: white;
+}
+
+.modal-year {
+  background-color: var(--color-institucional);
+  color: var(--color-secundario);
+  font-weight: bold;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .gallery-title {
+    font-size: 2rem;
+  }
+  
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+  }
+}

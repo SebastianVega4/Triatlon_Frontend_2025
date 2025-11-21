@@ -1,0 +1,31 @@
+<div class="container mt-4">
+    <div class="card">
+      <div class="card-header">
+        <h2>Control de Visibilidad de Resultados</h2>
+      </div>
+      
+      <div class="card-body">
+        <p class="lead">
+          Estado actual: 
+          <span class="badge" [ngClass]="resultadosVisibles ? 'bg-success' : 'bg-danger'">
+            {{ resultadosVisibles ? 'VISIBLES' : 'OCULTOS' }}
+          </span>
+        </p>
+        
+        <p>
+          Cuando los resultados están ocultos, los usuarios no podrán ver los tiempos, 
+          posiciones ni premios en las páginas públicas.
+        </p>
+        
+        <button 
+          class="btn btn-lg" 
+          [ngClass]="resultadosVisibles ? 'btn-danger' : 'btn-success'"
+          (click)="toggleVisibilidad()"
+          [disabled]="loading"
+        >
+          {{ resultadosVisibles ? 'Ocultar Resultados' : 'Mostrar Resultados' }}
+          <span *ngIf="loading" class="spinner-border spinner-border-sm ms-2"></span>
+        </button>
+      </div>
+    </div>
+  </div>

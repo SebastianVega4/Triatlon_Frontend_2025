@@ -1,0 +1,67 @@
+<div class="admin-container">
+    <!-- Botón toggle para móvil -->
+    <button class="sidebar-toggle d-lg-none" (click)="toggleSidebar()">
+      <i class="bi" [class.bi-list]="!sidebarOpen" [class.bi-x]="sidebarOpen"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" [class.open]="sidebarOpen">
+      <h3>Menú Administrador</h3>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin/gestion-solicitudes" routerLinkActive="active" (click)="closeSidebarMobile()">
+            <i class="bi bi-clipboard-check me-2"></i>
+            Solicitudes de Inscripción
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin/gestion-equipos" routerLinkActive="active" (click)="closeSidebarMobile()">
+            <i class="bi bi-people-fill me-2"></i>
+            Gestión de Equipos
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin/gestion-tiempos" routerLinkActive="active" (click)="closeSidebarMobile()">
+            <i class="bi bi-stopwatch me-2"></i>
+            Gestión de Tiempos
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin/gestion-imagenes" routerLinkActive="active" (click)="closeSidebarMobile()">
+            <i class="bi bi-images me-2"></i>
+            Gestión de Imágenes
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin/gestion-noticias" routerLinkActive="active" (click)="closeSidebarMobile()">
+            <i class="bi bi-newspaper me-2"></i>
+            Gestión de Noticias
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin/visibilidad-resultados" routerLinkActive="active" (click)="closeSidebarMobile()">
+            <i class="bi bi-eye me-2"></i>
+            Visibilidad Resultados
+          </a>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-primary mt-3 w-100" (click)="calcularResultados()">Calcular Resultados</button>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-primary mt-3 w-100" (click)="abrirRecursos()">Recursos</button>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-danger mt-3 w-100" (click)="logout()">Cerrar Sesión</button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Overlay para cerrar sidebar en móvil -->
+    <div class="sidebar-overlay" [class.show]="sidebarOpen" (click)="closeSidebarMobile()"></div>
+  
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  
+  <app-loading *ngIf="loading"></app-loading>

@@ -1,0 +1,529 @@
+:root {
+  --color-institucional: #fecb00;
+  --color-secundario: #000000;
+  --color-terciario: #f8f9fa;
+}
+
+// Header de la página
+.results-header {
+  background: linear-gradient(135deg, var(--color-secundario) 0%, #1a1a1a 100%);
+  color: white;
+  text-align: center;
+  padding: 60px 20px;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(254,203,0,0.1)"/></svg>');
+    opacity: 0.3;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.results-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: white;
+  
+  i {
+    color: var(--color-institucional);
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: var(--color-institucional);
+    margin: 20px auto 0;
+  }
+}
+
+.results-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+// Contenedor principal
+.container {
+  padding-bottom: 3rem;
+}
+
+// Contador de resultados
+.results-count {
+  color: var(--color-secundario);
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+
+  i {
+    color: var(--color-institucional);
+    font-size: 1.2rem;
+  }
+}
+
+// Tabla de resultados
+.table {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+  border: none !important;
+
+  // Sobrescribir estilos de Bootstrap
+  thead {
+    background-color: var(--color-secundario) !important;
+    color: white !important;
+    border: none !important;
+
+    th {
+      font-weight: 600;
+      padding: 1rem;
+      border: none !important;
+      color: white !important;
+      background-color: var(--color-secundario) !important;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: all 0.3s ease;
+      border: none !important;
+
+      &:hover {
+        background-color: rgba(254, 203, 0, 0.15) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-color: rgba(0, 0, 0, 0.05) !important;
+        color: var(--color-secundario);
+      }
+    }
+  }
+}
+
+// Sobrescribir clase table-light de Bootstrap
+.table-light {
+  background-color: var(--color-secundario) !important;
+  color: white !important;
+
+  th {
+    background-color: var(--color-secundario) !important;
+    color: white !important;
+  }
+}
+
+// Sobrescribir clase table-hover de Bootstrap
+.table-hover tbody tr:hover {
+  background-color: rgba(254, 203, 0, 0.15) !important;
+}
+
+// Badges con colores institucionales
+.badge {
+  font-size: 0.85rem;
+  padding: 0.5rem 0.9rem;
+  font-weight: 600;
+  border-radius: 20px;
+
+  &.bg-success {
+    background-color: var(--color-institucional) !important;
+    color: var(--color-secundario) !important;
+  }
+
+  &.bg-danger {
+    background-color: #dc3545 !important;
+    color: white !important;
+  }
+}
+
+// Filtros
+.filters-section {
+  .input-group {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+
+    .form-control {
+      border: 2px solid transparent;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+
+      &:focus {
+        border-color: var(--color-institucional);
+        box-shadow: 0 0 0 0.2rem rgba(254, 203, 0, 0.25);
+      }
+    }
+
+    .input-group-text {
+      background-color: var(--color-institucional);
+      border-color: var(--color-institucional);
+      color: var(--color-secundario);
+      font-weight: bold;
+      padding: 0.75rem 1.25rem;
+    }
+  }
+
+  .filter-select {
+    border: 2px solid #dee2e6;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    &:focus {
+      border-color: var(--color-institucional);
+      box-shadow: 0 0 0 0.2rem rgba(254, 203, 0, 0.25);
+    }
+  }
+
+  .btn-toggle {
+    background-color: white;
+    border: 2px solid #dee2e6;
+    color: var(--color-secundario);
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      border-color: var(--color-institucional);
+      background-color: rgba(254, 203, 0, 0.1);
+    }
+
+    &.active {
+      background-color: var(--color-institucional);
+      border-color: var(--color-institucional);
+      color: var(--color-secundario);
+    }
+  }
+}
+
+// Vista agrupada por equipos
+.equipos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.equipo-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.equipo-header {
+  background: linear-gradient(135deg, var(--color-secundario) 0%, #1a1a1a 100%);
+  color: white;
+  padding: 0.875rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+
+  .equipo-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+  }
+
+  .equipo-posicion {
+    background: var(--color-institucional);
+    color: var(--color-secundario);
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 0.35rem 0.75rem;
+    border-radius: 8px;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  .equipo-nombre {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+
+    i {
+      color: var(--color-institucional);
+      font-size: 1rem;
+    }
+  }
+
+  .equipo-tiempo-total {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background: rgba(254, 203, 0, 0.15);
+    padding: 0.5rem 0.875rem;
+    border-radius: 8px;
+    border: 2px solid var(--color-institucional);
+
+    .tiempo-label {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 0.15rem;
+    }
+
+    .tiempo-valor {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: var(--color-institucional);
+    }
+  }
+}
+
+.equipo-body {
+  padding: 0.875rem;
+}
+
+.participante-card {
+  background: #f8f9fa;
+  border: 1.5px solid #e9ecef;
+  border-radius: 10px;
+  padding: 0.75rem;
+  height: 100%;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: var(--color-institucional);
+    background: rgba(254, 203, 0, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .participante-nombre {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-secundario);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+
+    strong {
+      font-weight: 700;
+    }
+  }
+
+  .participante-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      font-size: 0.825rem;
+      color: #6c757d;
+
+      i {
+        color: var(--color-institucional);
+        font-size: 0.9rem;
+      }
+
+      &.tiempo-item {
+        font-weight: 600;
+        color: var(--color-secundario);
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+.badge-small {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.6rem;
+}
+
+// Iconos de disciplinas con colores institucionales
+.bi-droplet {
+  color: var(--color-institucional);
+}
+
+.bi-bicycle {
+  color: var(--color-institucional);
+}
+
+.bi-lightning {
+  color: var(--color-institucional);
+}
+
+// Alert con colores institucionales
+.alert-warning {
+  background-color: rgba(254, 203, 0, 0.1);
+  border: 2px solid var(--color-institucional);
+  color: var(--color-secundario);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  font-weight: 500;
+}
+
+// Botón para ver Excel completo (estilo sutil)
+.btn-excel-completo {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+  background-color: transparent;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+
+  i {
+    font-size: 1rem;
+  }
+
+  &:hover {
+    color: var(--color-secundario);
+    background-color: rgba(254, 203, 0, 0.1);
+    border-color: var(--color-institucional);
+    text-decoration: none;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .results-header {
+    padding: 40px 15px;
+  }
+
+  .results-title {
+    font-size: 2rem;
+  }
+
+  .results-subtitle {
+    font-size: 1rem;
+  }
+
+  .filters-section {
+    .input-group {
+      max-width: 100%;
+    }
+
+    .filter-select {
+      font-size: 0.9rem;
+    }
+
+    .btn-toggle {
+      font-size: 0.9rem;
+      padding: 0.6rem 0.8rem;
+    }
+  }
+
+  .equipo-header {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .equipo-info {
+      width: 100%;
+    }
+
+    .equipo-posicion {
+      font-size: 1.25rem;
+      padding: 0.4rem 0.8rem;
+      min-width: 50px;
+    }
+
+    .equipo-nombre {
+      font-size: 1.25rem;
+    }
+
+    .equipo-tiempo-total {
+      width: 100%;
+      align-items: center;
+      padding: 0.6rem 1rem;
+
+      .tiempo-label {
+        font-size: 0.8rem;
+      }
+
+      .tiempo-valor {
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  .equipo-body {
+    padding: 1rem;
+  }
+
+  .participante-card {
+    padding: 0.875rem;
+
+    .participante-nombre {
+      font-size: 0.95rem;
+    }
+
+    .participante-info .info-item {
+      font-size: 0.85rem;
+
+      &.tiempo-item {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .table {
+    font-size: 0.9rem;
+
+    thead th,
+    tbody td {
+      padding: 0.75rem 0.5rem;
+    }
+  }
+
+  .btn-excel-completo {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  .results-count {
+    width: 100%;
+  }
+}

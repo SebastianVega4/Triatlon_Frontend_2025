@@ -1,0 +1,112 @@
+<!-- Navegación -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" routerLink="/">
+      <img src="\assets\UPTC_logo.png" alt="Logo UPTC" width="37" height="300">
+      Triatlón UPTC
+    </a>
+    <button class="navbar-toggler" type="button" (click)="toggleMenu()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" [class.show]="isMenuOpen">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: true}">Inicio</a>
+        </li>
+        <li class="nav-item" *ngIf="inscripcionesAbiertas">
+          <a class="nav-link" routerLink="/inscripcion" routerLinkActive="active">Inscripción</a>
+        </li>
+
+        <!-- Dropdown Evento -->
+        <li class="nav-item dropdown" (mouseenter)="showEventoDropdown = true"
+          (mouseleave)="showEventoDropdown = false">
+          <a class="nav-link dropdown-toggle" href="#" role="button" [class.active]="isEventoActive()"
+            (click)="toggleEventoDropdown($event)">
+            Evento
+          </a>
+          <ul class="dropdown-menu" [class.show]="showEventoDropdown">
+            <li><a class="dropdown-item" href="#" (click)="scrollToSection('info', $event)">
+                <i class="bi bi-info-circle me-2"></i>Información
+              </a></li>
+            <li><a class="dropdown-item" routerLink="/participantes" (click)="closeDropdowns()">
+                <i class="bi bi-people me-2"></i>Participantes
+              </a></li>
+          </ul>
+        </li>
+
+        <!-- Dropdown Resultados -->
+        <li class="nav-item dropdown" (mouseenter)="showResultadosDropdown = true"
+          (mouseleave)="showResultadosDropdown = false">
+          <a class="nav-link dropdown-toggle" href="#" role="button" [class.active]="isResultadosActive()"
+            (click)="toggleResultadosDropdown($event)">
+            Resultados
+          </a>
+          <ul class="dropdown-menu" [class.show]="showResultadosDropdown">
+            <li><a class="dropdown-item" routerLink="/podio" (click)="closeDropdowns()">
+                <i class="bi bi-trophy me-2"></i>Clasificación
+              </a></li>
+            <li><a class="dropdown-item" routerLink="/premios-individuales" (click)="closeDropdowns()">
+                <i class="bi bi-award me-2"></i>Premios Individuales
+              </a></li>
+            <li><a class="dropdown-item" routerLink="/resultados-2024" (click)="closeDropdowns()">
+                <i class="bi bi-trophy me-2"></i>Resultados 2024
+              </a></li>
+            <li><a class="dropdown-item" routerLink="/galeria" (click)="closeDropdowns()">
+                <i class="bi bi-images me-2"></i>Galería
+              </a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/noticias" routerLinkActive="active">Noticias</a>
+        </li>
+
+        <li class="nav-item" *ngIf="!(isAuthenticated$ | async)">
+          <a class="nav-link" href="#" (click)="openAdminModal(); $event.preventDefault()"
+            [class.active]="isAdminRoute()">Admin</a>
+        </li>
+        <li class="nav-item" *ngIf="(isAuthenticated$ | async)">
+          <a class="nav-link" routerLink="/admin" routerLinkActive="active">Panel Admin</a>
+        </li>
+        <li class="nav-item" *ngIf="(isAuthenticated$ | async)">
+          <a class="nav-link" href="#" (click)="logout(); $event.preventDefault()">Cerrar Sesión</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Modal de Administrador -->
+<div class="modal fade" [class.show]="showAdminModal" [style.display]="showAdminModal ? 'block' : 'none'" tabindex="-1"
+  aria-labelledby="adminModalLabel" [attr.aria-hidden]="!showAdminModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header admin-modal-header">
+        <h5 class="modal-title" id="adminModalLabel">Acceso Administrador</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeAdminModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onAdminLogin()">
+          <div class="mb-3">
+            <label for="username" class="form-label">Usuario</label>
+            <input type="text" class="form-control" id="username" [(ngModel)]="username" name="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" [(ngModel)]="password" name="password" required>
+          </div>
+          <div class="alert alert-danger" *ngIf="loginError">
+            {{ loginError }}
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-admin-login">Iniciar Sesión</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop del modal -->
+<div class="modal-backdrop fade" [class.show]="showAdminModal" *ngIf="showAdminModal" (click)="closeAdminModal()"></div>

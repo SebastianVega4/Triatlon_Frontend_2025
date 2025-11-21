@@ -1,0 +1,264 @@
+:root {
+  --color-institucional: #fecb00;
+  --color-secundario: #000000;
+  --color-terciario: #f8f9fa;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.gestion-imagenes-container {
+  padding: 2rem 0;
+  min-height: calc(100vh - 60px);
+  background-color: #f5f5f5;
+}
+
+/* ===== TITULOS ===== */
+.page-title {
+  color: var(--color-secundario);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+/* ===== TARJETAS ===== */
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  background-color: var(--color-secundario);
+  color: white;
+  border-radius: 10px 10px 0 0 !important;
+  padding: 1rem 1.5rem;
+  border: none;
+}
+
+/* ===== LISTA DE EQUIPOS ===== */
+.images-list-card {
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  background: #fff;
+}
+
+.images-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.image-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  align-items: start;
+  transition: all 0.3s;
+}
+
+.image-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.image-info {
+  flex: 1;
+  white-space: normal;
+  overflow: visible;
+}
+
+.image-title {
+  font-weight: 600;
+  color: var(--color-secundario);
+  margin-bottom: 0.25rem;
+}
+
+.image-description {
+  font-size: 0.9rem;
+  color: #444;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* ===== ACCIONES ===== */
+.image-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.image-actions .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== ALERTAS ===== */
+.alert {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* ===== MODALES ===== */
+.modal {
+  z-index: 1055;
+}
+
+.modal-backdrop {
+  z-index: 1050;
+}
+
+.modal-content {
+  border-radius: 10px;
+  border: none;
+}
+
+.modal-header {
+  border-radius: 10px 10px 0 0;
+}
+
+/* ===== PARTICIPANTES ===== */
+.card-body p {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.card-body h6 {
+  color: var(--color-secundario);
+}
+
+/* ===== FORMULARIOS ===== */
+.form-label {
+  font-weight: 600;
+  color: var(--color-secundario);
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  transition: all 0.3s;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--color-institucional);
+  box-shadow: 0 0 0 0.2rem rgba(254, 203, 0, 0.25);
+}
+
+.form-select {
+  cursor: pointer;
+  background-color: white;
+}
+
+/* ===== FILTROS ===== */
+.btn-outline-secondary {
+  border-color: #6c757d;
+  color: #6c757d;
+  transition: all 0.3s;
+}
+
+.btn-outline-secondary:hover:not(:disabled) {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-outline-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+  .image-item {
+    grid-template-columns: 1fr;
+  }
+
+  .image-actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 576px) {
+  .image-actions {
+    justify-content: center;
+  }
+}
+
+// Botón de refrescar
+.btn-refrescar {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+  background: transparent;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: var(--color-institucional);
+    border-color: var(--color-institucional);
+    color: var(--color-secundario);
+    transform: rotate(180deg);
+  }
+
+  &:focus,
+  &:active {
+    background-color: var(--color-institucional) !important;
+    border-color: var(--color-institucional) !important;
+    color: var(--color-secundario) !important;
+    box-shadow: 0 0 0 0.25rem rgba(254, 203, 0, 0.25) !important;
+  }
+}
+
+// Botón de ver participantes
+.btn-ver-participantes {
+  background-color: #5C636A;
+  border-color: #5C636A;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #4a5056;
+    border-color: #4a5056;
+    color: white;
+    transform: scale(1.05);
+  }
+
+  &:focus,
+  &:active {
+    background-color: #4a5056 !important;
+    border-color: #4a5056 !important;
+    color: white !important;
+    box-shadow: 0 0 0 0.25rem rgba(92, 99, 106, 0.25) !important;
+  }
+}
+
+// Header del modal de participantes
+.modal-header-participantes {
+  background-color: var(--color-secundario);
+  color: white;
+  border-bottom: 3px solid var(--color-secundario);
+}
+
+// Backdrop del modal de participantes con difuminado
+.backdrop-participantes {
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}

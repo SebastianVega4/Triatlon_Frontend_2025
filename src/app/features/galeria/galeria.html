@@ -1,0 +1,103 @@
+<!-- Encabezado de Galería -->
+<section class="gallery-header">
+  <div class="container">
+    <h1 class="gallery-title">Galería Completa</h1>
+    <p class="gallery-subtitle">Recorrido visual por la historia del Triatlón Universitario UPTC</p>
+  </div>
+</section>
+
+<!-- Contenido de Galería -->
+<section class="gallery-content">
+  <div class="container">
+    <!-- Loading -->
+    <app-loading *ngIf="loading"></app-loading>
+
+    <!-- Error -->
+    <div *ngIf="error && !loading" class="alert alert-danger text-center">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ error }}
+      <button class="btn btn-sm btn-outline-danger ms-3" (click)="loadImages()">
+        Reintentar
+      </button>
+    </div>
+
+    <!-- Contenido cuando hay imágenes -->
+    <div *ngIf="!loading && !error">
+      <!-- Filtros -->
+      <div class="gallery-filter" *ngIf="galleryImages.length > 0">
+        <button 
+          class="filter-btn" 
+          [class.active]="activeFilter === 'all'"
+          (click)="setFilter('all')">
+          Todos
+        </button>
+        <button 
+          *ngFor="let year of getUniqueYears()"
+          class="filter-btn" 
+          [class.active]="activeFilter === year"
+          (click)="setFilter(year)">
+          {{ year }}
+        </button>
+      </div>
+
+      <!-- Mensaje cuando no hay imágenes -->
+      <div *ngIf="galleryImages.length === 0" class="text-center py-5">
+        <i class="bi bi-images" style="font-size: 4rem; color: #ccc;"></i>
+        <h3 class="mt-3">No hay imágenes disponibles</h3>
+        <p class="text-muted">Las imágenes de la galería aparecerán aquí cuando se agreguen.</p>
+      </div>
+
+      <!-- Grid de Galería -->
+      <div class="gallery-grid" *ngIf="filteredImages.length > 0">
+        <div 
+          *ngFor="let image of filteredImages" 
+          class="gallery-item"
+          (click)="openModal(image)">
+          <img [src]="image.url" [alt]="image.title">
+          <div class="gallery-overlay">
+            <span class="gallery-year">{{ image.year }}</span>
+            <div class="gallery-title-item">{{ image.title }}</div>
+            <div class="gallery-description">{{ image.description }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensaje cuando el filtro no tiene resultados -->
+      <div *ngIf="filteredImages.length === 0 && galleryImages.length > 0" class="text-center py-5">
+        <i class="bi bi-filter-circle" style="font-size: 3rem; color: #ccc;"></i>
+        <h4 class="mt-3">No hay imágenes para el año {{ activeFilter }}</h4>
+        <button class="btn btn-primary mt-3" (click)="setFilter('all')">Ver todas las imágenes</button>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+<!-- Modal de Imagen -->
+<div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" 
+     tabindex="-1" aria-labelledby="imageModalLabel" [attr.aria-hidden]="!showModal" *ngIf="selectedImage">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageModalLabel">Imagen del Triatlón UPTC</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <img [src]="selectedImage.url" [alt]="selectedImage.title" class="modal-image">
+        <div class="modal-info">
+          <span class="modal-year">{{ selectedImage.year }}</span>
+          <h4>{{ selectedImage.title }}</h4>
+          <p>{{ selectedImage.description }}</p>
+          <p class="text-muted mb-0">
+            <i class="bi bi-calendar-event me-2"></i>
+            {{ formatDate(selectedImage.fecha_imagen) }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop del modal -->
+<div class="modal-backdrop fade" [class.show]="showModal" *ngIf="showModal" (click)="closeModal()"></div>

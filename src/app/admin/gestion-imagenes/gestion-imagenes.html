@@ -1,0 +1,324 @@
+<div class="gestion-imagenes-container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="page-title">
+          <i class="bi bi-images me-2"></i>
+          Gestión de Imágenes de Galería
+        </h2>
+        <p class="page-subtitle">Sube y administra las imágenes que aparecerán en la galería pública</p>
+      </div>
+    </div>
+
+    <!-- Mensajes -->
+    <div class="row" *ngIf="successMessage || errorMessage">
+      <div class="col-12">
+        <div class="alert alert-success alert-dismissible fade show" *ngIf="successMessage">
+          <i class="bi bi-check-circle me-2"></i>
+          {{ successMessage }}
+          <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+        </div>
+        <div class="alert alert-danger alert-dismissible fade show" *ngIf="errorMessage">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          {{ errorMessage }}
+          <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Formulario de subida -->
+      <div class="col-lg-5 mb-4">
+        <div class="card upload-card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="bi bi-cloud-upload me-2"></i>
+              Subir Nueva Imagen
+            </h5>
+          </div>
+          <div class="card-body">
+            <form (ngSubmit)="onSubmit()">
+              <!-- Nombre -->
+              <div class="mb-3">
+                <label for="nombre" class="form-label">
+                  Nombre de la imagen <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="nombre"
+                  [(ngModel)]="nombre"
+                  name="nombre"
+                  placeholder="Ej: Partida de Natación 2024"
+                  required>
+              </div>
+
+              <!-- Descripción -->
+              <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea 
+                  class="form-control" 
+                  id="descripcion"
+                  [(ngModel)]="descripcion"
+                  name="descripcion"
+                  rows="3"
+                  placeholder="Describe brevemente la imagen..."></textarea>
+              </div>
+
+              <!-- Fecha -->
+              <div class="mb-3">
+                <label for="fechaImagen" class="form-label">
+                  Fecha del evento <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="fechaImagen"
+                  [(ngModel)]="fechaImagen"
+                  name="fechaImagen"
+                  required>
+              </div>
+
+              <!-- Archivo -->
+              <div class="mb-3">
+                <label for="fileInput" class="form-label">
+                  Seleccionar imagen <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="file" 
+                  class="form-control" 
+                  id="fileInput"
+                  (change)="onFileSelected($event)"
+                  accept="image/*"
+                  required>
+                <small class="form-text text-muted">
+                  Formatos permitidos: JPG, PNG, GIF, WEBP. Tamaño máximo: 10MB
+                </small>
+              </div>
+
+              <!-- Preview -->
+              <div class="preview-container" *ngIf="previewUrl">
+                <label class="form-label">Vista previa:</label>
+                <div class="preview-image-wrapper">
+                  <img [src]="previewUrl" alt="Preview" class="preview-image">
+                  <button 
+                    type="button" 
+                    class="btn-remove-preview"
+                    (click)="clearForm()">
+                    <i class="bi bi-x-circle"></i>
+                  </button>
+                </div>
+                <div class="preview-info" *ngIf="selectedFile">
+                  <small class="text-muted">
+                    <i class="bi bi-file-earmark-image me-1"></i>
+                    {{ selectedFile.name }} ({{ getFileSize(selectedFile.size) }})
+                  </small>
+                </div>
+              </div>
+
+              <!-- Botones -->
+              <div class="d-grid gap-2">
+                <button 
+                  type="submit" 
+                  class="btn btn-primary btn-upload"
+                  [disabled]="loading || !nombre || !fechaImagen || !selectedFile">
+                  <span *ngIf="!loading">
+                    <i class="bi bi-cloud-upload me-2"></i>
+                    Subir Imagen
+                  </span>
+                  <span *ngIf="loading">
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    Subiendo...
+                  </span>
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary"
+                  (click)="clearForm()"
+                  [disabled]="loading">
+                  <i class="bi bi-x-circle me-2"></i>
+                  Limpiar Formulario
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de imágenes -->
+      <div class="col-lg-7">
+        <div class="card images-list-card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="bi bi-collection me-2"></i>
+              Imágenes en Galería
+            </h5>
+            <button class="btn btn-sm btn-refrescar" (click)="loadImagenes()" title="Refrescar lista">
+              <i class="bi bi-arrow-clockwise"></i>
+            </button>
+          </div>
+          <div class="card-body">
+            <!-- Loading -->
+            <app-loading *ngIf="loadingImagenes"></app-loading>
+
+            <!-- Sin imágenes -->
+            <div *ngIf="!loadingImagenes && imagenes.length === 0" class="text-center py-5">
+              <i class="bi bi-images" style="font-size: 3rem; color: #ccc;"></i>
+              <p class="text-muted mt-3">No hay imágenes en la galería</p>
+            </div>
+
+            <!-- Lista de imágenes -->
+            <div class="images-grid" *ngIf="!loadingImagenes && imagenes.length > 0">
+              <div class="image-item" *ngFor="let imagen of imagenes">
+                <div class="image-thumbnail">
+                  <img [src]="imagen.url" [alt]="imagen.nombre">
+                </div>
+                <div class="image-info">
+                  <h6 class="image-title">{{ imagen.nombre }}</h6>
+                  <p class="image-description" *ngIf="imagen.descripcion">
+                    {{ imagen.descripcion }}
+                  </p>
+                  <small class="text-muted">
+                    <i class="bi bi-calendar-event me-1"></i>
+                    {{ formatDate(imagen.fecha_imagen) }}
+                  </small>
+                </div>
+                <div class="image-actions">
+                  <button 
+                    class="btn btn-sm btn-warning me-2"
+                    (click)="openEditModal(imagen)"
+                    title="Editar imagen">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button 
+                    class="btn btn-sm btn-danger"
+                    (click)="confirmDelete(imagen)"
+                    title="Eliminar imagen">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" [class.show]="showDeleteModal" [style.display]="showDeleteModal ? 'block' : 'none'" 
+     tabindex="-1" *ngIf="imagenToDelete">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          Confirmar Eliminación
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cancelDelete()"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Estás seguro de que deseas eliminar esta imagen?</p>
+        <div class="alert alert-warning">
+          <strong>{{ imagenToDelete.nombre }}</strong>
+          <p class="mb-0 mt-2">Esta acción no se puede deshacer y la imagen se eliminará permanentemente de Google Drive.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelDelete()">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger" (click)="deleteImagen()">
+          <i class="bi bi-trash me-2"></i>
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de edición -->
+<div class="modal fade" [class.show]="showEditModal" [style.display]="showEditModal ? 'block' : 'none'" 
+     tabindex="-1" *ngIf="imagenToEdit">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: var(--color-institucional); color: var(--color-secundario);">
+        <h5 class="modal-title">
+          <i class="bi bi-pencil me-2"></i>
+          Editar Imagen
+        </h5>
+        <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="saveEdit()">
+          <!-- Nombre -->
+          <div class="mb-3">
+            <label for="editNombre" class="form-label">
+              Nombre de la imagen <span class="text-danger">*</span>
+            </label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="editNombre"
+              [(ngModel)]="editNombre"
+              name="editNombre"
+              required>
+          </div>
+
+          <!-- Descripción -->
+          <div class="mb-3">
+            <label for="editDescripcion" class="form-label">Descripción</label>
+            <textarea 
+              class="form-control" 
+              id="editDescripcion"
+              [(ngModel)]="editDescripcion"
+              name="editDescripcion"
+              rows="3"></textarea>
+          </div>
+
+          <!-- Fecha -->
+          <div class="mb-3">
+            <label for="editFechaImagen" class="form-label">
+              Fecha del evento <span class="text-danger">*</span>
+            </label>
+            <input 
+              type="date" 
+              class="form-control" 
+              id="editFechaImagen"
+              [(ngModel)]="editFechaImagen"
+              name="editFechaImagen"
+              required>
+          </div>
+
+          <!-- Vista previa de la imagen actual -->
+          <div class="mb-3">
+            <label class="form-label">Imagen actual:</label>
+            <div class="text-center">
+              <img [src]="imagenToEdit.url" [alt]="imagenToEdit.nombre" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
+            </div>
+            <small class="text-muted">Nota: Para cambiar la imagen, debes eliminarla y subir una nueva.</small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeEditModal()">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-primary" (click)="saveEdit()" [disabled]="loading">
+          <span *ngIf="!loading">
+            <i class="bi bi-save me-2"></i>
+            Guardar Cambios
+          </span>
+          <span *ngIf="loading">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Guardando...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop del modal -->
+<div class="modal-backdrop fade" [class.show]="showDeleteModal || showEditModal" *ngIf="showDeleteModal || showEditModal" (click)="showDeleteModal ? cancelDelete() : closeEditModal()"></div>

@@ -1,0 +1,169 @@
+@use 'bootstrap/scss/bootstrap' as *;
+@use '../../animaciones.scss' as *;
+
+// Colores UPTC Colombia
+$uptc-primary: #005883;
+$uptc-secondary: #F0B310;
+$uptc-accent: #6D6E70;
+$uptc-light: #E6E7E8;
+$uptc-dark: #333333;
+
+// Colores adicionales para el triatlón
+$tri-red: #E74C3C;
+$tri-blue: #3498DB;
+$tri-green: #2ECC71;
+
+// Espaciados
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: $spacer * 0.25,
+  2: $spacer * 0.5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+);
+
+// Tipografía
+$font-family-base: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+$font-size-base: 1rem;
+$line-height-base: 1.5;
+
+// Breakpoints
+$breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+);
+
+// Sombras
+$box-shadow-sm: 0 0.125rem 0.25rem rgba($uptc-dark, 0.075);
+$box-shadow: 0 0.5rem 1rem rgba($uptc-dark, 0.15);
+$box-shadow-lg: 0 1rem 3rem rgba($uptc-dark, 0.175);
+
+// Transiciones
+$transition-base: all 0.3s ease-in-out;
+$transition-fade: opacity 0.15s linear;
+$transition-collapse: height 0.35s ease;
+
+form {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow: $box-shadow;
+  animation: fadeIn 0.5s ease-out;
+
+  h2 {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &::before {
+      content: '\F4FE'; // bi-people
+      font-family: 'bootstrap-icons';
+    }
+  }
+
+  .form-control, .form-select {
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba($uptc-accent, 0.3);
+    transition: $transition-base;
+
+    &:focus {
+      border-color: $uptc-primary;
+      box-shadow: 0 0 0 0.25rem rgba($uptc-primary, 0.1);
+    }
+  }
+
+  .participante-card {
+    margin-bottom: 1.5rem;
+    animation: fadeIn 0.3s ease-out;
+
+    .card {
+      border: none;
+      border-radius: 0.5rem;
+      box-shadow: $box-shadow-sm;
+      overflow: hidden;
+      transition: $transition-base;
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: $box-shadow;
+      }
+
+      &-body {
+        padding: 1.5rem;
+        background-color: rgba($uptc-primary, 0.03);
+        border-left: 3px solid $uptc-secondary;
+
+        .card-title {
+          color: $uptc-primary;
+          margin-bottom: 1.25rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          &::before {
+            content: '\F4E1'; // bi-person
+            font-family: 'bootstrap-icons';
+          }
+        }
+      }
+    }
+
+    .btn-danger {
+      margin-top: 1rem;
+    }
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: $transition-base;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &-secondary {
+      background-color: $uptc-accent;
+      border-color: $uptc-accent;
+
+      &:hover {
+        background-color: darken($uptc-accent, 10%);
+      }
+
+      &::before {
+        content: '\F4FE'; // bi-plus
+        font-family: 'bootstrap-icons';
+      }
+    }
+
+    &-primary {
+      &::before {
+        content: '\F1C7'; // bi-save
+        font-family: 'bootstrap-icons';
+      }
+    }
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  form {
+    padding: 1.5rem;
+
+    .d-flex {
+      flex-direction: column;
+      gap: 1rem;
+
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+}

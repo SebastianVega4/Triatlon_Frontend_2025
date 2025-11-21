@@ -1,0 +1,30 @@
+<div class="container">
+    <app-loading *ngIf="loading"></app-loading>
+  
+    <div *ngIf="!loading && equipo" class="equipo-detalle">
+      <h2>{{ equipo.nombre }}</h2>
+      <div *ngIf="!resultadosVisibles" class="alert alert-info">
+        El cálculo del total está oculto temporalmente. Por favor, espere a la ceremonia de premiación.
+      </div>
+      <p *ngIf="equipo.posicion && resultadosVisibles">Posición: {{ equipo.posicion }}°</p>
+      <p *ngIf="resultadosVisibles">Tiempo total: {{ equipo.tiempo_total || 'Sin registrar' }}</p>
+      <p *ngIf="equipo.penalizacion" class="penalizado">⚠️ Equipo penalizado</p>
+  
+      <h3>Participantes</h3>
+      <div class="participantes-list">
+        <div *ngFor="let p of participantes" class="participante-card" [class.penalizado]="p.penalizado">
+          <h4>{{ p.nombre }}</h4>
+          <p> {{ p.disciplina | titlecase }}</p>
+          <p> {{ p.genero === 'M' ? 'Masculino' : 'Femenino' }}</p>
+          <p> {{ p.tiempo || 'Sin registrar' }}</p>
+          <p *ngIf="p.penalizado" class="penalizado-badge">
+            ⚠️ Penalizado ({{ getDisciplinaPenalizacion(p.disciplina) }})
+          </p>
+        </div>
+      </div>
+  
+      <div class="navigation-links">
+        <a routerLink="/podio" class="back-link">← Volver al PODIO</a>
+      </div>
+    </div>
+  </div>

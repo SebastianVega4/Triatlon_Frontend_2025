@@ -1,0 +1,518 @@
+<div class="container my-4">
+  <!-- Página provisional cuando las inscripciones están cerradas -->
+  <div *ngIf="!inscripcionesAbiertas" class="inscripciones-cerradas-container">
+    <div class="inscripciones-cerradas-card">
+      <i class="bi bi-calendar-x-fill cerradas-icon"></i>
+      <h2>Inscripciones Cerradas</h2>
+      <p class="lead">El plazo para realizar inscripciones ha finalizado.</p>
+      
+      <div class="info-section">
+        <h4><i class="bi bi-info-circle me-2"></i>Información Importante</h4>
+        <ul class="info-list">
+          <li>Las inscripciones cerraron el <strong>11 de noviembre de 2025</strong></li>
+          <li>Ya no es posible registrar nuevos equipos para esta edición</li>
+          <li>Los equipos inscritos recibirán información por correo electrónico</li>
+        </ul>
+      </div>
+
+      <div class="evento-info">
+        <h4><i class="bi bi-calendar-event me-2"></i>Información del Evento</h4>
+        <div class="evento-detalles">
+          <div class="detalle-item">
+            <i class="bi bi-calendar3"></i>
+            <div>
+              <strong>Fecha</strong>
+              <p>13 de noviembre de 2025</p>
+            </div>
+          </div>
+          <div class="detalle-item">
+            <i class="bi bi-geo-alt-fill"></i>
+            <div>
+              <strong>Lugar</strong>
+              <p>UPTC Sogamoso</p>
+            </div>
+          </div>
+          <div class="detalle-item">
+            <i class="bi bi-clock"></i>
+            <div>
+              <strong>Hora de inicio</strong>
+              <p>7:00 AM</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acciones-section">
+        <h4>¿Qué puedes hacer?</h4>
+        <div class="acciones-buttons">
+          <a routerLink="/participantes" class="btn-accion">
+            <i class="bi bi-people-fill me-2"></i>
+            Ver Equipos Inscritos
+          </a>
+          <a routerLink="/" class="btn-accion btn-accion-secondary">
+            <i class="bi bi-house-fill me-2"></i>
+            Volver al Inicio
+          </a>
+          <a href="#info" class="btn-accion btn-accion-secondary">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            Información del Evento
+          </a>
+        </div>
+      </div>
+
+      <div class="contacto-section">
+        <p class="text-muted">
+          <i class="bi bi-envelope me-2"></i>
+          Para más información, contacta a las oficinas de bienestar universitario
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario de inscripción (solo si las inscripciones están abiertas) -->
+  <div *ngIf="inscripcionesAbiertas" class="card">
+    <div class="card-body">
+      <h2 class="card-title">
+        <i class="bi bi-people-fill me-2"></i>
+        Inscripción por equipo (3 integrantes)
+      </h2>
+
+      <div *ngIf="!inscripcionAbierta" class="alert alert-warning mt-3" role="alert">
+        El plazo de inscripción ha finalizado. No se pueden inscribir nuevos equipos.
+      </div>
+
+      <!-- Información Importante (Desplegable) -->
+      <div class="alert alert-info mt-3" role="alert">
+        <div class="d-flex justify-content-between align-items-center" style="cursor: pointer;"
+          (click)="toggleInfoImportante()">
+          <h5 class="mb-0">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            Información importante
+          </h5>
+          <i class="bi" [ngClass]="mostrarInfoImportante ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+        </div>
+
+        <div *ngIf="mostrarInfoImportante" class="mt-3">
+          <ul class="mb-0">
+            <li class="mb-2">
+              <strong>Equipos mixtos:</strong> Debe haber al menos una mujer y un hombre en cada equipo.
+            </li>
+            <li class="mb-2">
+              <strong>Documentos necesarios:</strong> Carnet, cédula de cada participante y seguro médico o certificado de afiliación a una EPS.
+            </li>
+            <li class="mb-2">
+              <strong>Restricción ASCUN:</strong> Las personas pertenecientes a disciplina ASCUN no podrán participar en
+              la misma disciplina en el evento de triatlón.
+            </li>
+            <li class="mb-2">
+              <strong>Seguro estudiantil:</strong>
+              <a href="https://forms.office.com/pages/responsepage.aspx?id=Ru12IF2O5U6Ki3VAjRIzF2SNOq4C2oFCrZnH0jl0vdVUOERXMkM0WlBWVkJZRDhPUEZaMFVENVhCSiQlQCNjPTEu"
+                target="_blank" class="alert-link">
+                Solicita aquí tu seguro estudiantil
+                <i class="bi bi-download ms-1"></i>
+              </a>
+            </li>
+            <li class="mb-0">
+              <strong>Certificado de afiliación EPS:</strong>
+              <a href="https://www.adres.gov.co/consulte-su-eps"
+                target="_blank" class="alert-link">
+                Solicita aquí tu certificado de afiliación a una EPS
+                <i class="bi bi-download ms-1"></i>
+                </a>
+          </ul>
+        </div>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="enviarInscripcion()" class="needs-validation" novalidate>
+
+        <!-- DATOS DEL EQUIPO -->
+        <div class="team-info-card">
+          <h5>Información del Equipo</h5>
+          <div class="team-info-content">
+            <div class="mb-3">
+              <label for="nombreEquipo" class="form-label">
+                Nombre del equipo <span class="text-danger">*</span>
+              </label>
+              <input id="nombreEquipo" type="text" class="form-control" formControlName="teamName"
+                placeholder="Ingrese el nombre del equipo">
+              <div *ngIf="form.get('teamName')?.invalid && form.get('teamName')?.touched" class="text-danger">
+                <small>El nombre del equipo es requerido (máx. 60 caracteres)</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PARTICIPANTES -->
+        <div formArrayName="participants">
+          <div *ngFor="let p of participants.controls; let i = index" [formGroupName]="i" class="participant-card">
+            <h5>
+              Participante {{ i + 1 }}
+              <span *ngIf="i === 0" class="badge-delegado-info">
+                - Delegado
+                <i class="bi bi-info-circle-fill ms-1"></i>
+                <span class="tooltip-delegado">
+                  El delegado es la persona con la que se estará en contacto para temas informativos y otros asuntos
+                  relacionados con el equipo.
+                </span>
+              </span>
+            </h5>
+
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label">
+                  Nombre completo <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control" formControlName="nombre"
+                  placeholder="Ingrese el nombre completo">
+                <div *ngIf="getParticipantControl(i, 'nombre')?.invalid && getParticipantControl(i, 'nombre')?.touched"
+                  class="text-danger">
+                  <small>Nombre requerido</small>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">
+                  Correo institucional <span class="text-danger">*</span>
+                </label>
+                <input type="email" class="form-control" formControlName="correo" placeholder="usuario@uptc.edu.co">
+                <div *ngIf="getParticipantControl(i, 'correo')?.invalid && getParticipantControl(i, 'correo')?.touched"
+                  class="text-danger">
+                  <small>Correo @uptc.edu.co requerido</small>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">
+                  Teléfono <span class="text-danger">*</span>
+                </label>
+                <input type="tel" class="form-control" formControlName="telefono" placeholder="Número de contacto">
+                <div
+                  *ngIf="getParticipantControl(i, 'telefono')?.invalid && getParticipantControl(i, 'telefono')?.touched"
+                  class="text-danger">
+                  <small>Teléfono válido requerido</small>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">
+                  Género <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" formControlName="genero">
+                  <option value="">Seleccione su género</option>
+                  <option *ngFor="let g of genres" [value]="g">{{ g }}</option>
+                </select>
+                <div *ngIf="getParticipantControl(i, 'genero')?.invalid && getParticipantControl(i, 'genero')?.touched"
+                  class="text-danger">
+                  <small>Género requerido</small>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">
+                  Seccional <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" formControlName="seccional">
+                  <option value="">Seleccione su seccional</option>
+                  <option *ngFor="let s of seccionales" [value]="s">{{ s }}</option>
+                </select>
+                <div
+                  *ngIf="getParticipantControl(i, 'seccional')?.invalid && getParticipantControl(i, 'seccional')?.touched"
+                  class="text-danger">
+                  <small>Seccional requerida</small>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">
+                  Rol <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" formControlName="rol">
+                  <option value="">Seleccione su rol</option>
+                  <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+                </select>
+                <div *ngIf="getParticipantControl(i, 'rol')?.invalid && getParticipantControl(i, 'rol')?.touched"
+                  class="text-danger">
+                  <small>Rol requerido</small>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">
+                  Disciplina <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" formControlName="disciplina">
+                  <option value="">Seleccione disciplina</option>
+                  <option *ngFor="let d of disciplines" [value]="d">{{ d }}</option>
+                </select>
+                <div
+                  *ngIf="getParticipantControl(i, 'disciplina')?.invalid && getParticipantControl(i, 'disciplina')?.touched"
+                  class="text-danger">
+                  <small>Disciplina requerida</small>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">
+                  ¿Pertenece a una disciplina ASCUN? <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" formControlName="participacion">
+                  <option value="">Seleccione una opción</option>
+                  <option value="si">Sí</option>
+                  <option value="no">No</option>
+                </select>
+                <div
+                  *ngIf="getParticipantControl(i, 'participacion')?.invalid && getParticipantControl(i, 'participacion')?.touched"
+                  class="text-danger">
+                  <small>Esta selección es requerida</small>
+                </div>
+              </div>
+
+              <!-- Mostrar solo si selecciona "si" -->
+              <div class="col-12" *ngIf="getParticipantControl(i,'participacion')?.value === 'si'">
+                <label class="form-label">
+                  Disciplina ASCUN <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" formControlName="disciplina_ascun">
+                  <option value="">Seleccione una disciplina</option>
+                  <option *ngFor="let d of ascunDisciplines" [value]="d">{{ d }}</option>
+                </select>
+                <div
+                  *ngIf="getParticipantControl(i, 'disciplina_ascun')?.invalid && getParticipantControl(i, 'disciplina_ascun')?.touched"
+                  class="text-danger">
+                  <small>Disciplina ASCUN requerida</small>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ARCHIVO GENERAL DEL EQUIPO -->
+        <div class="documentation-card">
+          <h5>Documentación del equipo</h5>
+          <div class="documentation-content">
+            <div class="mb-3">
+              <label class="form-label">
+                Archivo PDF con carnets, cédulas y seguro médico <span class="text-danger">*</span>
+              </label>
+              <input type="file" class="form-control" (change)="onTeamFileSelected($event)" accept=".pdf">
+              <div class="form-text">
+                <i class="bi bi-info-circle me-1"></i>
+                Suba un único PDF que contenga los carnets, las cédulas y los certificados de seguro médico de los 3
+                participantes (máx. 5MB)
+              </div>
+              <div *ngIf="form.get('teamFile')?.invalid && form.get('teamFile')?.touched" class="text-danger">
+                <small *ngIf="form.get('teamFile')?.errors?.['requiredFile']">Archivo requerido</small>
+                <small *ngIf="form.get('teamFile')?.errors?.['invalidType']">Solo archivos PDF</small>
+                <small *ngIf="form.get('teamFile')?.errors?.['tooLarge']">Máximo 5MB</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AVISO DE PRIVACIDAD -->
+        <div class="privacy-section">
+          <div class="privacy-checkbox">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="privacyCheck" [(ngModel)]="aceptaPrivacidad"
+                [ngModelOptions]="{standalone: true}">
+              <label class="form-check-label" for="privacyCheck">
+                He leído y acepto el
+                <a href="javascript:void(0)" class="privacy-link" (click)="openPrivacyModal()">
+                  <strong>Aviso de Privacidad y Tratamiento de Datos</strong>
+                </a>
+                <span class="text-danger">*</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-inscripcion"
+            [disabled]="form.invalid || !inscripcionAbierta || !aceptaPrivacidad">
+            <i class="bi bi-send me-2"></i>
+            {{ !aceptaPrivacidad && form.valid ? 'Debe aceptar el Aviso de Privacidad' : (form.invalid ? 'Complete todos
+            los campos' : 'Enviar inscripción') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal de éxito/error -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-custom" (click)="$event.stopPropagation()" [class.modal-success]="isSuccess"
+    [class.modal-error]="!isSuccess">
+    <div class="modal-icon">
+      <i class="bi" [ngClass]="isSuccess ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i>
+    </div>
+
+    <h3 class="modal-custom-title">{{ modalTitle }}</h3>
+    <p class="modal-custom-message">{{ modalMessage }}</p>
+
+    <!-- Opciones de navegación para éxito -->
+    <div class="modal-actions" *ngIf="isSuccess">
+      <!-- Sección destacada de información del evento -->
+      <div class="info-evento-section">
+        <p class="info-evento-text">
+          <i class="bi bi-info-circle-fill me-2"></i>
+          Puedes explorar la información del evento y el reglamento de cada disciplina
+        </p>
+        <button class="btn-info-evento" (click)="navegarAInfo()">
+          <i class="bi bi-book me-2"></i>
+          Ver Información del Evento
+        </button>
+      </div>
+
+      <div class="divider-section">
+        <span>O explora más sobre el evento</span>
+      </div>
+
+      <div class="action-buttons">
+        <button class="action-btn" (click)="navegarA('/participantes')">
+          <i class="bi bi-people-fill"></i>
+          <span>Ver Equipos Inscritos</span>
+        </button>
+        <button class="action-btn" (click)="navegarA('/noticias')">
+          <i class="bi bi-newspaper"></i>
+          <span>Leer Noticias</span>
+        </button>
+        <button class="action-btn" (click)="navegarA('/galeria')">
+          <i class="bi bi-images"></i>
+          <span>Ver Galería</span>
+        </button>
+        <button class="action-btn" (click)="navegarA('/resultados-2024')">
+          <i class="bi bi-trophy-fill"></i>
+          <span>Resultados 2024</span>
+        </button>
+      </div>
+      <button class="btn-close-modal" (click)="closeModal()">
+        Volver al inicio
+      </button>
+    </div>
+
+    <!-- Botón para error -->
+    <div class="modal-actions" *ngIf="!isSuccess">
+      <button class="btn-close-modal btn-error" (click)="closeModal()">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Overlay de carga -->
+<div class="loading-overlay" *ngIf="loading">
+  <div class="loading-content">
+    <div class="spinner-container">
+      <div class="spinner"></div>
+      <div class="spinner-inner"></div>
+    </div>
+    <h4 class="loading-title">Procesando inscripción...</h4>
+    <p class="loading-message">Por favor espera mientras registramos tu equipo</p>
+    <div class="loading-steps">
+      <div class="step" [class.active]="loadingStep >= 1" [class.completed]="loadingStep > 1">
+        <i class="bi" [ngClass]="loadingStep > 1 ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+        <span>Creando equipo</span>
+      </div>
+      <div class="step" [class.active]="loadingStep >= 2" [class.completed]="loadingStep > 2">
+        <i class="bi" [ngClass]="loadingStep > 2 ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+        <span>Registrando participantes</span>
+      </div>
+      <div class="step" [class.active]="loadingStep >= 3" [class.completed]="loadingStep > 3">
+        <i class="bi" [ngClass]="loadingStep > 3 ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+        <span>Subiendo documentación</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Privacidad -->
+<div class="modal fade show" tabindex="-1" [ngClass]="{ 'd-block': showPrivacyModal }" *ngIf="showPrivacyModal"
+  style="background: rgba(0,0,0,0.6);">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header privacy-modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-shield-lock-fill me-2"></i>
+          Aviso de Privacidad y Tratamiento de Datos
+        </h5>
+        <button type="button" class="btn-close" (click)="closePrivacyModal()"></button>
+      </div>
+      <div class="modal-body privacy-modal-body">
+        <div class="privacy-content">
+          <p><strong>Universidad Pedagógica y Tecnológica de Colombia - UPTC</strong></p>
+
+          <p>
+            En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, la Universidad Pedagógica y Tecnológica de
+            Colombia (UPTC)
+            informa a los participantes del evento de Triatlón que los datos personales suministrados serán tratados de
+            manera confidencial
+            y utilizados exclusivamente para los siguientes fines:
+          </p>
+
+          <p><strong>1. Finalidad del tratamiento de datos:</strong></p>
+          <ul>
+            <li>Gestión de inscripciones y registro de participantes en el evento de Triatlón.</li>
+            <li>Verificación de identidad y documentación requerida (carnet, cédula, seguro médico).</li>
+            <li>Comunicación de información relacionada con el evento (horarios, resultados, cambios).</li>
+            <li>Registro de tiempos, posiciones y resultados deportivos.</li>
+            <li>Publicación de resultados y fotografías del evento en medios institucionales.</li>
+            <li>Elaboración de estadísticas y reportes del evento.</li>
+          </ul>
+
+          <p><strong>2. Datos recolectados:</strong></p>
+          <ul>
+            <li>Nombre completo</li>
+            <li>Correo electrónico institucional</li>
+            <li>Número de teléfono</li>
+            <li>Género</li>
+            <li>Seccional de la UPTC</li>
+            <li>Disciplina deportiva</li>
+            <li>Documentos de identificación (carnet, cédula)</li>
+            <li>Certificado de seguro médico</li>
+          </ul>
+
+          <p><strong>3. Derechos del titular:</strong></p>
+          <p>Como titular de los datos personales, usted tiene derecho a:</p>
+          <ul>
+            <li>Conocer, actualizar y rectificar sus datos personales.</li>
+            <li>Solicitar prueba de la autorización otorgada.</li>
+            <li>Ser informado sobre el uso que se ha dado a sus datos personales.</li>
+            <li>Presentar quejas ante la Superintendencia de Industria y Comercio por infracciones a la ley.</li>
+            <li>Revocar la autorización y/o solicitar la supresión de sus datos cuando no se respeten los principios,
+              derechos y garantías constitucionales y legales.</li>
+          </ul>
+
+          <p><strong>4. Responsable del tratamiento:</strong></p>
+          <p>
+            Universidad Pedagógica y Tecnológica de Colombia - UPTC<br>
+            Avenida Central del Norte 39-115, Tunja, Boyacá<br>
+            Teléfono: (098) 7405626
+          </p>
+
+          <p><strong>5. Seguridad de la información:</strong></p>
+          <p>
+            La UPTC implementa medidas técnicas, humanas y administrativas necesarias para proteger la información
+            personal
+            y evitar su adulteración, pérdida, consulta, uso o acceso no autorizado o fraudulento.
+          </p>
+
+          <p><strong>6. Vigencia:</strong></p>
+          <p>
+            Los datos personales serán conservados durante el tiempo necesario para cumplir con las finalidades
+            descritas
+            y de acuerdo con las disposiciones legales aplicables.
+          </p>
+
+          <p class="mt-3">
+            <strong>Al aceptar este aviso, usted autoriza expresamente a la UPTC para el tratamiento de sus datos
+              personales
+              conforme a lo establecido en la presente política.</strong>
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closePrivacyModal()">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="aceptaPrivacidad = true; closePrivacyModal()">
+          <i class="bi bi-check-circle me-2"></i>
+          Acepto
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

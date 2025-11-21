@@ -1,0 +1,162 @@
+<div class="container">
+    <app-loading *ngIf="loading"></app-loading>
+
+    <!-- Página Provisional (cuando mostrarResultados = false) -->
+    <div *ngIf="!loading && !mostrarResultados" class="provisional-page">
+      <div class="provisional-header">
+        <i class="bi bi-trophy-fill provisional-icon"></i>
+        <h1 class="provisional-title">Clasificación del Triatlón UPTC 2025</h1>
+      </div>
+
+      <div class="provisional-content">
+        <div class="info-card">
+          <i class="bi bi-calendar-event-fill card-icon"></i>
+          <h3>Resultados Próximamente</h3>
+          <p>
+            Los resultados oficiales de la competencia se publicarán el día del evento, 
+            <strong>13 de noviembre de 2025</strong>, una vez inicie la competencia se irán mostrando en tiempo real.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <i class="bi bi-clock-fill card-icon"></i>
+          <h3>Horario del Evento</h3>
+          <ul class="schedule-list">
+            <li><strong>Natación:</strong> 7:00 AM - 400 metros</li>
+            <li><strong>Ciclismo:</strong> 10:00 AM - 21 km (14 vueltas)</li>
+            <li><strong>Atletismo:</strong> Después de ciclismo - 3 km (2 vueltas)</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <i class="bi bi-info-circle-fill card-icon"></i>
+          <h3>¿Qué Encontrarás Aquí?</h3>
+          <p>
+            Una vez inicie la competencia, esta página mostrará:
+          </p>
+          <ul class="features-list">
+            <li><i class="bi bi-check-circle-fill"></i> Clasificación general de equipos</li>
+            <li><i class="bi bi-check-circle-fill"></i> Tiempos oficiales por disciplina</li>
+            <li><i class="bi bi-check-circle-fill"></i> Podio con los 3 primeros lugares</li>
+            <li><i class="bi bi-check-circle-fill"></i> Resultados individuales por disciplina</li>
+          </ul>
+        </div>
+
+        <div class="cta-section">
+          <p class="cta-text">Mientras tanto, puedes:</p>
+          <div class="cta-buttons">
+            <a routerLink="/participantes" class="btn-cta">
+              <i class="bi bi-people-fill me-2"></i>
+              Ver Participantes
+            </a>
+            <a routerLink="/resultados-2024" class="btn-cta btn-cta-secondary">
+              <i class="bi bi-trophy me-2"></i>
+              Resultados 2024
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Página Real de Resultados (cuando mostrarResultados = true) -->
+    <div *ngIf="!loading && mostrarResultados">
+      <h2>Clasificación</h2>
+      
+      <!-- Botón flotante para premios individuales -->
+      <a *ngIf="resultadosVisibles" routerLink="/premios-individuales" class="premios-link-floating">
+        <i class="bi bi-award me-2"></i>
+        Premios Individuales
+      </a>
+
+      <div class="disciplinas-links">
+        <a routerLink="/resultados/natacion">
+          <i class="bi bi-star-fill me-1"></i>
+          Natación
+        </a>
+        <a routerLink="/resultados/ciclismo">
+          <i class="bi bi-star-fill me-1"></i>
+          Ciclismo
+        </a>
+        <a routerLink="/resultados/atletismo">
+          <i class="bi bi-star-fill me-1"></i>
+          Atletismo
+        </a>
+      </div>
+  
+    <!-- Mensaje cuando los resultados están ocultos -->
+    <div *ngIf="!resultadosVisibles" class="resultados-ocultos-container">
+      <div class="resultados-ocultos-card">
+        <i class="bi bi-eye-slash-fill ocultos-icon"></i>
+        <h3>Resultados Temporalmente Ocultos</h3>
+        <p>
+          Los resultados están ocultos temporalmente hasta la ceremonia de premiación.
+        </p>
+        <p class="text-muted">
+          <i class="bi bi-trophy me-2"></i>
+          Una vez finalice la ceremonia, podrás ver la clasificación completa aquí.
+        </p>
+        <div class="cta-buttons-ocultos">
+          <a routerLink="/participantes" class="btn-cta-ocultos">
+            <i class="bi bi-people-fill me-2"></i>
+            Ver Participantes
+          </a>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="!loading && resultadosVisibles">
+
+      <!-- Podio con los 3 primeros lugares -->
+      <div class="podio-container">
+        <!-- Segundo lugar -->
+        <div *ngIf="podio[1]" class="podio-item silver" [routerLink]="resultadosVisibles ? ['/equipo', podio[1].id] : null" [style.cursor]="resultadosVisibles ? 'pointer' : 'default'">
+          <div class="podio-posicion">2°</div>
+          <h3>
+            <span *ngIf="resultadosVisibles">{{ podio[1].nombre }}</span>
+            <span *ngIf="!resultadosVisibles">Equipo oculto</span>
+          </h3>
+          <p>Tiempo: {{ podio[1].tiempo_total }}</p>
+          <p *ngIf="podio[1].penalizacion" class="penalizado">⚠️ Penalizado</p>
+        </div>
+  
+        <!-- Primer lugar -->
+        <div *ngIf="podio[0]" class="podio-item gold" [routerLink]="resultadosVisibles ? ['/equipo', podio[0].id] : null" [style.cursor]="resultadosVisibles ? 'pointer' : 'default'">
+          <div class="podio-posicion">1°</div>
+          <h3>
+            <span *ngIf="resultadosVisibles">{{ podio[0].nombre }}</span>
+            <span *ngIf="!resultadosVisibles">Equipo oculto</span>
+          </h3>
+          <p>Tiempo: {{ podio[0].tiempo_total }}</p>
+          <p *ngIf="podio[0].penalizacion" class="penalizado">⚠️ Penalizado</p>
+        </div>
+  
+        <!-- Tercer lugar -->
+        <div *ngIf="podio[2]" class="podio-item bronze" [routerLink]="resultadosVisibles ? ['/equipo', podio[2].id] : null" [style.cursor]="resultadosVisibles ? 'pointer' : 'default'">
+          <div class="podio-posicion">3°</div>
+          <h3>
+            <span *ngIf="resultadosVisibles">{{ podio[2].nombre }}</span>
+            <span *ngIf="!resultadosVisibles">Equipo oculto</span>
+          </h3>
+          <p>Tiempo: {{ podio[2].tiempo_total }}</p>
+          <p *ngIf="podio[2].penalizacion" class="penalizado">⚠️ Penalizado</p>
+        </div>
+      </div>
+  
+      <!-- Lista de otros equipos (4° lugar en adelante) -->
+      <div class="otros-equipos-container">
+        <h3>Otros equipos</h3>
+        <div class="otros-equipos-list">
+          <div *ngFor="let equipo of otrosEquipos" class="equipo-card" [class.penalizado]="equipo.penalizacion" [routerLink]="resultadosVisibles ? ['/equipo', equipo.id] : null" [style.cursor]="resultadosVisibles ? 'pointer' : 'default'">
+            <div class="posicion">{{ equipo.posicion }}°</div>
+            <div class="nombre">
+              <span *ngIf="resultadosVisibles">{{ equipo.nombre }}</span>
+              <span *ngIf="!resultadosVisibles">Equipo oculto</span>
+            </div>
+            <div class="tiempo">{{ equipo.tiempo_total }}</div>
+            <div *ngIf="equipo.penalizacion" class="penalizado-badge">⚠️</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

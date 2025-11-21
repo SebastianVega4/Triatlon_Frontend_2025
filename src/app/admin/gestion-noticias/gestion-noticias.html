@@ -1,0 +1,235 @@
+<div class="gestion-noticias">
+  <div class="container">
+    <h1 class="page-title">Gestión de Noticias</h1>
+    <p class="page-subtitle">Crea, edita y administra las noticias sobre el evento</p>
+
+
+
+    <!-- Formulario de creación -->
+    <div class="card">
+      <div class="card-header">
+        <h2>
+          <i class="bi bi-cloud-upload me-2"></i>
+          Crear Nueva Noticia
+        </h2>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="onSubmit()">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="titulo">Título *</label>
+              <input type="text" id="titulo" [(ngModel)]="titulo" name="titulo" placeholder="Título de la noticia"
+                required>
+            </div>
+
+            <div class="form-group">
+              <label for="categoria">Categoría *</label>
+              <select id="categoria" [(ngModel)]="categoria" name="categoria" required>
+                <option value="">Selecciona una categoría</option>
+                <option *ngFor="let cat of categorias" [value]="cat">{{ capitalizeCategory(cat) }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="fecha">Fecha *</label>
+              <input type="date" id="fecha" [(ngModel)]="fecha" name="fecha" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="resumen">Resumen *</label>
+            <textarea id="resumen" [(ngModel)]="resumen" name="resumen" rows="3"
+              placeholder="Breve resumen de la noticia" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="contenido">Contenido *</label>
+            <quill-editor [(ngModel)]="contenido" name="contenido" [modules]="quillConfig"
+              placeholder="Escribe el contenido de la noticia aquí. Puedes usar negrita, cursiva, títulos, listas, etc."
+              [styles]="{height: '300px'}">
+            </quill-editor>
+          </div>
+
+          <div class="form-group">
+            <label for="imagen" class="form-label">
+              Seleccionar imagen <span class="text-danger">*</span>
+            </label>
+            <input type="file" class="form-control" id="imagen" (change)="onFileSelected($event)" accept="image/*"
+              required>
+            <small class="form-text text-muted">
+              Formatos permitidos: JPG, PNG, GIF, WEBP. Tamaño máximo: 10MB
+            </small>
+
+            <!-- Preview -->
+            <div class="preview-container" *ngIf="previewUrl">
+              <label class="form-label">Vista previa:</label>
+              <div class="preview-image-wrapper">
+                <img [src]="previewUrl" alt="Preview" class="preview-image">
+                <button type="button" class="btn-remove-preview" (click)="removePreview()">
+                  <i class="bi bi-x-circle"></i>
+                </button>
+              </div>
+              <div class="preview-info" *ngIf="selectedFile">
+                <small class="text-muted">
+                  <i class="bi bi-file-earmark-image me-1"></i>
+                  {{ selectedFile.name }} ({{ getFileSize(selectedFile.size) }})
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="clearForm()" [disabled]="loading">
+              <i class="bi bi-x-circle me-2"></i>
+              Limpiar Formulario
+            </button>
+            <button type="submit" class="btn-primary"
+              [disabled]="loading || !titulo || !resumen || !categoria || !fecha || !contenido || !selectedFile">
+              <span *ngIf="!loading">
+                <i class="bi bi-cloud-upload me-2"></i>
+                Crear Noticia
+              </span>
+              <span *ngIf="loading">
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Creando...
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Lista de noticias -->
+    <div class="card">
+      <div class="card-header">
+        <h2>
+          <i class="bi bi-newspaper me-2"></i>
+          Noticias Publicadas
+        </h2>
+      </div>
+      <div class="card-body">
+        <div *ngIf="loadingNoticias" class="loading-state">
+          Cargando noticias...
+        </div>
+
+        <div *ngIf="!loadingNoticias && noticias.length === 0" class="empty-state">
+          No hay noticias publicadas
+        </div>
+
+        <div *ngIf="!loadingNoticias && noticias.length > 0" class="noticias-list">
+          <div *ngFor="let noticia of noticias" class="noticia-item">
+            <div class="noticia-image">
+              <img [src]="getImageUrl(noticia)" [alt]="noticia.titulo">
+            </div>
+            <div class="noticia-content">
+              <div class="noticia-meta">
+                <span class="categoria">{{ capitalizeCategory(noticia.categoria) }}</span>
+                <span class="fecha">{{ formatDate(noticia.fecha) }}</span>
+              </div>
+              <h3>{{ noticia.titulo }}</h3>
+              <p>{{ noticia.resumen }}</p>
+            </div>
+            <div class="noticia-actions">
+              <button class="btn btn-sm btn-warning me-2" (click)="openEditModal(noticia)" title="Editar noticia">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="confirmDelete(noticia)" title="Eliminar noticia">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación de eliminación -->
+  <div *ngIf="showDeleteModal" class="modal-overlay" (click)="cancelDelete()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Confirmar Eliminación</h3>
+      <p>¿Estás seguro de que deseas eliminar la noticia "{{ noticiaToDelete?.titulo }}"?</p>
+      <p class="warning">Esta acción no se puede deshacer.</p>
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="cancelDelete()">Cancelar</button>
+        <button class="btn-danger" (click)="deleteNoticia()" [disabled]="loading">
+          {{ loading ? 'Eliminando...' : 'Eliminar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notificaciones Toast -->
+  <div class="toast-container">
+    <div *ngIf="successMessage" class="toast toast-success">
+      <div class="toast-icon">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+      <div class="toast-content">
+        <h4>¡Éxito!</h4>
+        <p>{{ successMessage }}</p>
+      </div>
+      <button class="toast-close" (click)="successMessage = ''">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+
+    <div *ngIf="errorMessage" class="toast toast-error">
+      <div class="toast-icon">
+        <i class="bi bi-x-circle-fill"></i>
+      </div>
+      <div class="toast-content">
+        <h4>Error</h4>
+        <p>{{ errorMessage }}</p>
+      </div>
+      <button class="toast-close" (click)="errorMessage = ''">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal de edición -->
+  <div *ngIf="showEditModal" class="modal-overlay" (click)="closeEditModal()">
+    <div class="modal-content modal-large" (click)="$event.stopPropagation()">
+      <h3>Editar Noticia</h3>
+      <form (ngSubmit)="saveEdit()">
+        <div class="form-group">
+          <label for="editTitulo">Título *</label>
+          <input type="text" id="editTitulo" [(ngModel)]="editTitulo" name="editTitulo" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editCategoria">Categoría *</label>
+            <select id="editCategoria" [(ngModel)]="editCategoria" name="editCategoria" required>
+              <option *ngFor="let cat of categorias" [value]="cat">{{ capitalizeCategory(cat) }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="editFecha">Fecha *</label>
+            <input type="date" id="editFecha" [(ngModel)]="editFecha" name="editFecha" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="editResumen">Resumen *</label>
+          <textarea id="editResumen" [(ngModel)]="editResumen" name="editResumen" rows="3" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="editContenido">Contenido *</label>
+          <quill-editor [(ngModel)]="editContenido" name="editContenido" [modules]="quillConfig"
+            placeholder="Escribe el contenido de la noticia aquí" [styles]="{height: '300px'}">
+          </quill-editor>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" (click)="closeEditModal()">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="loading">
+            {{ loading ? 'Guardando...' : 'Guardar Cambios' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

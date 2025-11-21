@@ -1,0 +1,444 @@
+@use 'bootstrap/scss/bootstrap' as *;
+
+:root {
+  --color-institucional: #fecb00;
+  --color-secundario: #000000;
+  --color-terciario: #f8f9fa;
+}
+
+:host {
+  display: block;
+  padding: 3rem 1rem 2rem;
+  background-color: white;
+}
+
+// Contenedor principal
+.info-evento-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: white;
+  border-radius: 15px;
+  padding: 3rem 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  position: relative;
+  z-index: 1;
+
+  &:not(:has(.modal-overlay)) {
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  h2 {
+    font-size: 2.5rem;
+    color: var(--color-secundario);
+    margin-bottom: 1rem;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 15px;
+    display: inline-block;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background-color: var(--color-institucional);
+    }
+  }
+
+  .subtitle {
+    color: #6c757d;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+// Selector de disciplinas
+.disciplinas-selector {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+// Botones de disciplinas
+.disciplina-btn {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--color-institucional);
+  background-color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-secundario);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: var(--color-institucional);
+    color: var(--color-secundario);
+    transform: translateY(-2px);
+  }
+
+  &.active {
+    background-color: var(--color-institucional);
+    color: var(--color-secundario);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.btn-resultados-anterior {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--color-institucional);
+  background-color: var(--color-institucional);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-secundario);
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+
+  &:hover {
+    background-color: #e0b000;
+    transform: translateY(-2px);
+  }
+}
+
+// Card con detalle de disciplina
+.disciplina-detalle-card {
+  position: relative;
+  background-color: white;
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: left;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--color-institucional);
+  animation: fadeIn 0.5s ease-in-out;
+
+  h3 {
+    margin-top: 0;
+    font-size: 1.8rem;
+    color: var(--color-secundario);
+    font-weight: 700;
+  }
+
+  h4 {
+    font-size: 1.2rem;
+    color: var(--color-secundario);
+    border-bottom: 2px solid var(--color-institucional);
+    padding-bottom: 0.5rem;
+    margin-top: 1.5rem;
+    font-weight: 600;
+  }
+
+  p {
+    line-height: 1.6;
+    color: #495057;
+  }
+}
+
+// Contenido del detalle
+.detalle-content {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.texto-info {
+  flex: 2;
+  min-width: 300px;
+}
+
+.mapa-info {
+  flex: 1;
+  min-width: 250px;
+}
+
+.mapa-img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 2px solid #dee2e6;
+  margin-bottom: 1rem;
+}
+
+.google-maps-container {
+  width: 100%;
+  margin-top: 1rem;
+  position: relative;
+  padding-bottom: 56%; // Ratio 16:9 para hacer el iframe más pequeño
+  height: 0;
+  overflow: hidden;
+}
+
+.google-maps-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  border: 2px solid #dee2e6;
+}
+
+.columna-derecha {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.info-adicional {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 2px solid var(--color-institucional);
+
+  h4 {
+    margin-top: 0;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+// Botón de cierre
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: var(--color-secundario);
+    transform: scale(1.1);
+  }
+}
+
+// Animación institucional
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive
+@include media-breakpoint-down(md) {
+  .info-evento-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .disciplina-detalle-card {
+    padding: 1.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  .disciplina-btn {
+    font-size: 0.95rem;
+    padding: 0.6rem 1.2rem;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .info-evento-container {
+    padding: 1.5rem 1rem;
+    border-radius: 10px;
+  }
+
+  .disciplina-detalle-card {
+    padding: 1rem;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  .detalle-content {
+    flex-direction: column;
+  }
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-in-out;
+  overflow-y: auto;
+  padding: 6rem 0 2rem;
+}
+
+.modal-content {
+  position: relative;
+  background-color: white;
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: left;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+  border: 2px solid var(--color-institucional);
+  width: 95%;
+  max-width: 1200px;
+  margin: auto;
+  pointer-events: all;
+
+  h3 {
+    margin-top: 0;
+    font-size: 1.8rem;
+    color: var(--color-secundario);
+    font-weight: 700;
+  }
+
+  h4 {
+    font-size: 1.2rem;
+    color: var(--color-secundario);
+    border-bottom: 2px solid var(--color-institucional);
+    padding-bottom: 0.5rem;
+    margin-top: 1.5rem;
+    font-weight: 600;
+  }
+
+  p {
+    line-height: 1.6;
+    color: #495057;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Pestañas del modal
+.modal-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 0.5rem;
+}
+
+.tab-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: transparent;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6c757d;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    background-color: rgba(254, 203, 0, 0.1);
+    color: var(--color-secundario);
+  }
+
+  &.active {
+    background-color: var(--color-institucional);
+    color: var(--color-secundario);
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--color-institucional);
+    }
+  }
+}
+
+// Responsive para el modal
+@include media-breakpoint-down(md) {
+  .modal-content {
+    padding: 1.5rem;
+  }
+
+  .modal-tabs {
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .modal-content {
+    padding: 1rem;
+    width: 95%;
+  }
+
+  .detalle-content {
+    flex-direction: column;
+  }
+
+  .modal-tabs {
+    gap: 0.3rem;
+  }
+
+  .tab-btn {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
+// Est
+ilos para el embed de Strava
+.strava-embed-placeholder {
+  width: 100%;
+  min-height: 400px;
+  border-radius: 8px;
+  overflow: hidden;
+  
+  // Asegurar que el iframe de Strava se vea bien
+  iframe {
+    width: 100%;
+    border-radius: 8px;
+  }
+}
