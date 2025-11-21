@@ -17,7 +17,7 @@ import { combineLatest } from 'rxjs';
 })
 export class Podio implements OnInit {
   //  CONFIGURACIÓN: Cambiar a true para mostrar los resultados reales
-  mostrarResultados = false; //  Cambiar a true el día de la competencia
+  mostrarResultados = true; //  Cambiar a true el día de la competencia
   
   podio: Equipo[] = [];
   otrosEquipos: Equipo[] = [];
